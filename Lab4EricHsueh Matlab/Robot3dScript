@@ -1,0 +1,13 @@
+load('walk1.mat')
+load('human_data.mat')
+i = 0;
+n = 30;
+theta1 = [];
+theta2 = [];
+
+while i < n
+    theta1= invKin3D(Ml,theta1,L[i:]
+    theta2 = invKin3D(Mr,theta2,R[i:]
+    i =i +1;
+end
+robot3D(humanInterp(drad,[theta1,theta2]))
