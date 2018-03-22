@@ -1,0 +1,4 @@
+function [el,k] = elimmat(A,k)
+    [m,n]=size(L);
+
+end
