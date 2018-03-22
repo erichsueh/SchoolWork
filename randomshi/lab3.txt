@@ -1,0 +1,29 @@
+create table product (maker char(10),model integer,type char(20),primary key(model,maker));
+insert into product values('A',1001,'PC');
+insert into product values('A',1002,'PC');
+insert into product values('A',1003,'PC');
+insert into product values('B',1004,'PC');
+select * from product;
+
+create table pc(model integer,speed integer,ram integer,hd float,price integer, primary key(model));
+insert into pc values(1001,133,16,1.6,1595);
+insert into pc values(1002,120,16,1.6,1399);
+insert into pc values(1003,166,24,2.5,1899);
+insert into pc values(1004,166,32,2.5,1999);
+select * from pc;
+
+create table laptop(model integer,speed integer,ram integer,hd float,price integer, primary key(model));
+insert into laptop values(2001,100,20,1.1,1999);
+insert into laptop values(2002,117,12,0.7,1999);
+insert into laptop values(2003,117,32,1,1999);
+insert into laptop values(2004,133,16,1.1,1999);
+select * from laptop;
+
+create table printer(model integer,color char(5),type char(20),price integer,primary key(model));
+insert into printer values(3001,'True','Ink-jet',275);
+insert into printer values(3002,'True','Ink-jet',269);
+insert into printer values(3003,'False','Laser',829);
+insert into printer values(3004,'False','Laser',879);
+select * from printer;
+
+commit;

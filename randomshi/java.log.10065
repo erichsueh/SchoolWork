@@ -1,0 +1,4 @@
+  Operating System: Linux 4.4.0-45-generic #66~14.04.1-Ubuntu SMP Wed Oct 19 15:05:38 UTC 2016 x86_64
+  Processor ID:     x86 Family 6 Model 23 Stepping 10, GenuineIntel
+  Host Name:        ue04
+FATAL ERROR in native method: Nativewindow X11 IOError: Display 0x7f9c43be8360 (:0.0): No such file or directory

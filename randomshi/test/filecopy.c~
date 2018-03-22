@@ -1,0 +1,9 @@
+#include <stdio.h>
+main()
+{
+  (int harc);
+ harc=getchar();
+ while (harc != EOF){
+   putchar(harc);
+   harc=getchar();}
+ }
