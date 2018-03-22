@@ -1,0 +1,12 @@
+import cx_Oracle
+
+con = cx_Oracle.connect("ehsueh","","gwynne.cs.ualberta.ca:1521/CRS")
+curs = con.cursor()
+print("Connected")
+#curs.execute("create table movie(title char(20), movie_number  integer, primary key(movie_number))")
+print("Table Created")
+#curs.execute("insert into movie values(‘Chicago’, 1)")
+print("data inserted")
+curs.execute("select title, movie_number from movie")
+rows = curs.fetchall()
+print(rows)

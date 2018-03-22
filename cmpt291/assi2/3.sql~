@@ -1,0 +1,7 @@
+prompt Question3-ehsueh
+
+SELECT f1.flwer
+FROM follows f1
+WHERE f1.flwee IN (SELECT f2.flwee FROM follows f2 WHERE f2.flwer = 'john doe')
+GROUP BY f1.flwer
+HAVING COUNT(*) = (SELECT COUNT(*) FROM follows f3 WHERE f3.flwer = 'john doe');

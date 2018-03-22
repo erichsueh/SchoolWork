@@ -1,0 +1,12 @@
+
+SELECT *
+FROM (SELECT u1.name, u1.usr, u1.city 
+     FROM users u1
+     WHERE u1.name LIKE 'cunt'
+     ORDER BY LENGTH(u1.name) ASC)a1
+UNION
+SELECT *
+FROM (SELECT u2.name, u2.usr, u2.city
+     FROM users u2
+     WHERE u2.city LIKE 'cunt'
+     ORDER BY LENGTH(u2.city))a2;

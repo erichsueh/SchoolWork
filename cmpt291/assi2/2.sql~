@@ -1,0 +1,6 @@
+prompt Question2-ehsueh
+select f1.flwer
+from follows f1, follows f2
+where f1.start_date - sysdate >= 180;
+--AND f1.flwee = f2.flwee 
+--AND f2.flwer = 'john doe';

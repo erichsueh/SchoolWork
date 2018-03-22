@@ -1,0 +1,8 @@
+prompt Question3-ehsueh
+
+SELECT c.name
+FROM c291.clients c,c291.services s,c291.orders o
+WHERE c.client_id = o.cl_id
+AND s.service_id = o.sr_id
+GROUP BY c.name
+HAVING SUM(s.price_per_hour) > 500;

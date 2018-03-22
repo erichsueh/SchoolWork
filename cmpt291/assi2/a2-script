@@ -1,0 +1,754 @@
+Script started on Wed 15 Feb 2017 03:08:12 PM MST
+ehsueh@ui09:~/cmpt291/assi2>sqlpl,[Kus
+
+SQL*Plus: Release 12.1.0.2.0 Production on Wed Feb 15 15:08:18 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Enter user-name: @ erichsueh        hsueh
+Enter password: 
+Last Successful login time: Wed Feb 15 2017 14:53:05 -07:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> @t	 ta	 able
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table created.
+
+
+Table created.
+
+
+Table created.
+
+
+Table created.
+
+
+Table created.
+
+
+Table created.
+
+
+Table created.
+
+
+Table created.
+
+SQL> @ta  a2	-data
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+SQL> @1
+Question1-ehsueh
+
+    WRITER
+----------
+       100
+       209
+       213
+       217
+       220
+       205
+       211
+       102
+       201
+       212
+       101
+
+    WRITER
+----------
+       105
+       203
+       216
+       221
+       103
+       208
+
+17 rows selected.
+
+SQL> @2
+Question2-ehsueh
+@3
+     FLWER
+----------
+       101
+       208
+       205
+       205
+       209
+       300
+
+6 rows selected.
+
+SQL> @3
+SP2-0310: unable to open file "3crs3.sql"
+SQL> @3
+Question3-ehsueh
+
+     FLWER
+----------
+       300
+       216
+
+SQL> @4
+Question4-ehsueh
+
+    WRITER
+----------
+       104
+
+SQL> @5
+Question5-ehsueh
+  7  ;
+
+*
+ERROR at line 7:
+ORA-00903: invalid table name
+
+
+SQL> @6
+Question6-ehsueh
+
+    WRITER TDATE
+---------- ---------
+TEXT
+--------------------------------------------------------------------------------
+       102 25-DEC-16
+Hate to say it but #edgyidea.
+
+       103 10-JAN-15
+Testing my tweets.
+
+       105 12-APR-15
+#Dolphins are neat.
+
+
+    WRITER TDATE
+---------- ---------
+TEXT
+--------------------------------------------------------------------------------
+       220 01-JAN-16
+Heros never die!
+
+
+SQL> @7
+Question7-ehsueh
+HAVING COUNT(i.members) / (SELECT COUNT(*) FROM WHERE flwer = member GROUP BY lname)>=.5
+                                                *
+ERROR at line 5:
+ORA-00903: invalid table name
+
+
+SQL> @8
+Question8-ehsueh
+  4  ;
+SELECT rt.tdate, tr.writer, COUNT(rt.writer) as retweet
+                 *
+ERROR at line 1:
+ORA-00904: "TR"."WRITER": invalid identifier
+
+
+SQL> @9
+Question9-ehsueh
+  7  ;
+FROM(
+*
+ERROR at line 3:
+ORA-00936: missing expression
+
+
+SQL> @19 0
+Question10-ehsueh
+SQL> quit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+ehsueh@ui09:~/cmpt291/assi2>exit
+exit
+
+Script done on Wed 15 Feb 2017 03:10:05 PM MST

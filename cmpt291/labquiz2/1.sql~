@@ -1,0 +1,7 @@
+prompt Question1-ehsueh
+
+SELECT s.name,s.price_per_hour
+FROM c291.services s
+WHERE price_per_hour < 100 
+AND price_per_hour >2
+ORDER BY price_per_hour;
