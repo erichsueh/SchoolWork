@@ -1,0 +1,30 @@
+Script started on Tue 28 Feb 2017 07:01:07 PM MST
+ehsueh@uc03:~/496/sciprtest>tar -xvf a2.tgz 
+a2-sample.gtp
+board.py
+board_util.py
+Go1.py
+gtp_connection.py
+nogosolvertest.gtp
+ehsueh@uc03:~/496/sciprtest>cd
+ehsueh@uc03:~>cd ..[K[Ksc[K[K[K[K[Kls
+291			    Downloads  Templates  cmpt333	  java.log.7923		     matlab_crash_dump.10495-1	test
+496			    Lab5-1.py  Videos	  hello.c~	  java.log.9359		     matlab_crash_dump.10583-1
+C:\nppdf32Log\debuglog.txt  Music      cmpt201	  java.log.10065  lab3.txt		     matlab_crash_dump.7923-1
+Desktop			    Pictures   cmpt229	  java.log.10495  lab3.txt~		     matlab_crash_dump.9359-1
+Documents		    Public     cmpt291	  java.log.10583  matlab_crash_dump.10065-1  randomshi
+ehsueh@uc03:~>cd 496/
+ehsueh@uc03:~/496>cd
+ehsueh@uc03:~>cd 496/
+ehsueh@uc03:~/496>ls
+Go1  NoGo2  sciprtest
+ehsueh@uc03:~/496>c [K [Kd sciprtest/
+ehsueh@uc03:~/496/sciprtest>ls
+Go1.py	a2-sample.gtp  a2.tgz  board.py  board_util.py	gtp_connection.py  nogosolvertest.gtp  presubmission
+ehsueh@uc03:~/496/sciprtest>gogui-regress ./Go1.py a2-sample.gtp 
+50 unexpected FAIL: Correct 'unknown', got 'b f7'
+ehsueh@uc03:~/496/sciprtest>gogui-regress ./Go1.py a2-sample.gtp [K[K[K[K[K[K[K[K[K[K[K[K[K[Knogosolvertest.gtp 
+ehsueh@uc03:~/496/sciprtest>exit
+exit
+
+Script done on Tue 28 Feb 2017 07:04:15 PM MST

@@ -1,0 +1,482 @@
+<html>
+<head>
+<title>Output: nogosolvertest.gtp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="gogui-regress 1.4.9 (http://gogui.sf.net)">
+<style type="text/css">
+<!--
+body { margin:0; }
+span.comment { color:#999999; }
+span.fail { font-weight:bold; color:#ff5454; }
+span.error { font-weight:bold; color:#ffa954; }
+span.stderr { color:#666666; }
+span.invalid { background:#ff5454;}
+span.pass { font-weight:bold; color:#5eaf5e; }
+span.test { font-weight:bold; }
+-->
+</style>
+</head>
+<body bgcolor="white" text="black" link="#0000ee" vlink="#551a8b">
+<table border="0" width="100%" bgcolor="#91aee8" border="0">
+<tr><td>
+<h1>Output: nogosolvertest.gtp</h1>
+</td></tr>
+</table>
+<table width="100%" bgcolor="#e0e0e0">
+<tr><th align="left">Date:</th><td>February 28, 2017 7:17:11 PM MST</td></tr>
+<tr><th align="left">Host:</th><td>uc03 (Intel(R) Core(TM) i7-2600 CPU @ 3.40GHz)</td></tr>
+<tr><th align="left" valign="top">Command:</th>
+<td valign="top"><tt>./Go1.py</tt></td></tr>
+</table>
+<pre style="margin:1em">
+name
+= NoGo2
+
+version
+= 0.1
+
+cputime
+? Unknown command
+
+</pre>
+<hr style="margin:1em" size="1">
+<pre style="margin:1em">
+<span class="comment">#Private test file, with test cases that are independant of the public test case#These tests are written for NoGo.
+</span>
+<span class="comment">#1.) Tests for auto resign, where program knows there is no winning move
+</span><span class="command">boardsize 1
+</span>= 
+
+<span class="command">clear_board
+</span>= 
+
+<span class="command">timelimit 5
+</span>= 
+
+<span class="command">genmove w
+</span><span class="test">#?[resign]
+= resign
+
+</span>
+<span class="comment">#2.) Tests for proper output of opponent winning, which does not include output #of the winning move.
+</span><span class="command">boardsize 3
+</span>= 
+
+<span class="command">clear_board
+</span>= 
+
+<span class="command">timelimit 5
+</span>= 
+
+<span class="command">play b a1
+</span>= 
+
+<span class="command">solve
+</span><span class="test">#?[b]
+= b
+
+</span>
+<span class="comment">#3.) Same as test case 2 but to check if program outputs properly for white
+#winning as the opponent
+</span><span class="command">boardsize 3
+</span>= 
+
+<span class="command">clear_board
+</span>= 
+
+<span class="command">timelimit 5
+</span>= 
+
+<span class="command">play w a1
+</span>= 
+
+<span class="command">solve
+</span><span class="test">#?[w]
+= w
+
+</span>
+<span class="comment">#4.)Test for larger board size to solve
+</span>
+<span class="command">boardsize 7
+</span>= 
+
+<span class="command">clear_board
+</span>= 
+
+<span class="command">play b d4
+</span>= 
+
+<span class="command">play w c4
+</span>= 
+
+<span class="command">play b e4
+</span>= 
+
+<span class="command">play w d3
+</span>= 
+
+<span class="command">play b e6
+</span>= 
+
+<span class="command">play w f4
+</span>= 
+
+<span class="command">play b f5
+</span>= 
+
+<span class="command">play w c5
+</span>= 
+
+<span class="command">play b d5
+</span>= 
+
+<span class="command">play w a3
+</span>= 
+
+<span class="command">play b b4
+</span>= 
+
+<span class="command">play w a4
+</span>= 
+
+<span class="command">play b b3
+</span>= 
+
+<span class="command">play w d2
+</span>= 
+
+<span class="command">play b c2
+</span>= 
+
+<span class="command">play w c1
+</span>= 
+
+<span class="command">play b b1
+</span>= 
+
+<span class="command">play w e2
+</span>= 
+
+<span class="command">play b e1
+</span>= 
+
+<span class="command">play w f2
+</span>= 
+
+<span class="command">play b f1
+</span>= 
+
+<span class="command">play w f3
+</span>= 
+
+<span class="command">play b g3
+</span>= 
+
+<span class="command">play w g1
+</span>= 
+
+<span class="command">play b g5
+</span>= 
+
+<span class="command">play w g4
+</span>= 
+
+<span class="command">play b e5
+</span>= 
+
+<span class="command">play w a2
+</span>= 
+
+<span class="command">play b d6
+</span>= 
+
+<span class="command">play w a5
+</span>= 
+
+<span class="command">play b c6
+</span>= 
+
+<span class="command">play w b6
+</span>= 
+
+<span class="command">play b e7
+</span>= 
+
+<span class="command">play w b7
+</span>= 
+
+<span class="command">play b a7
+</span>= 
+
+<span class="command">play w c7
+</span>= 
+
+<span class="command">play b g7
+</span>= 
+
+<span class="command">play w d7
+</span>= 
+
+<span class="command">play b f7
+</span>= 
+
+<span class="command">play w f6
+</span>= 
+
+<span class="command">play b a1
+</span>= 
+
+<span class="command">play w c3
+</span>= 
+
+<span class="command">play b e3
+</span>= 
+
+<span class="command">solve
+</span><span class="test">#? [w b5]
+= w b5
+
+</span>
+<span class="comment">#5.) Tests for timeout
+</span><span class="command">boardsize 10
+</span>= 
+
+<span class="command">clear_board
+</span>= 
+
+<span class="command">play w a1
+</span>= 
+
+<span class="command">solve
+</span><span class="test">#? [unknown]
+= unknown
+
+</span>
+<span class="comment">#6.) Test for multiple possible winning moves
+</span><span class="command">boardsize 2
+</span>= 
+
+<span class="command">clear_board
+</span>= 
+
+<span class="command">play w a1
+</span>= 
+
+<span class="command">play b a2
+</span>= 
+
+<span class="command">solve
+</span><span class="test">#? [w b1|w b2]
+= w b1
+
+</span>
+<span class="comment">#7.) Test for multiple possible winning moves on 3x3 board
+</span><span class="command">boardsize 3
+</span>= 
+
+<span class="command">clear_board
+</span>= 
+
+<span class="command">play w a1
+</span>= 
+
+<span class="command">play b c3
+</span>= 
+
+<span class="command">play w a2
+</span>= 
+
+<span class="command">play b c2
+</span>= 
+
+<span class="command">play w b2
+</span>= 
+
+<span class="command">play b b1
+</span>= 
+
+<span class="command">solve
+</span><span class="test">#? [w a3|w b3]
+= w b3
+
+</span>
+<span class="comment">#8.)Tests for resign function during proper play
+</span>
+<span class="command">boardsize 2
+</span>= 
+
+<span class="command">clear_board
+</span>= 
+
+<span class="command">play w a1
+</span>= 
+
+<span class="command">play b a2
+</span>= 
+
+<span class="command">play w b1
+</span>= 
+
+<span class="command">genmove b
+</span><span class="test">#? [resign]
+= resign
+
+</span>
+<span class="comment">#9.) Test for a large amount of time, should never fail to produce a winner.
+</span>
+<span class="command">boardsize 2
+</span>= 
+
+<span class="command">clear_board
+</span>= 
+
+<span class="command">timelimit 10
+</span>= 
+
+<span class="command">play w a1
+</span>= 
+
+<span class="command">play b a2
+</span>= 
+
+<span class="command">solve
+</span><span class="test">#? [w b1|w b2]
+= w b1
+
+</span>
+<span class="comment">#10.) Larger board size, more time, more moves to solve
+</span><span class="command">boardsize 7
+</span>= 
+
+<span class="command">clear_board
+</span>= 
+
+<span class="command">timelimit 15
+</span>= 
+
+<span class="command">play b d4
+</span>= 
+
+<span class="command">play w c4
+</span>= 
+
+<span class="command">play b e4
+</span>= 
+
+<span class="command">play w d3
+</span>= 
+
+<span class="command">play b e6
+</span>= 
+
+<span class="command">play w f4
+</span>= 
+
+<span class="command">play b f5
+</span>= 
+
+<span class="command">play w c5
+</span>= 
+
+<span class="command">play b d5
+</span>= 
+
+<span class="command">play w a3
+</span>= 
+
+<span class="command">play b b4
+</span>= 
+
+<span class="command">play w a4
+</span>= 
+
+<span class="command">play b b3
+</span>= 
+
+<span class="command">play w d2
+</span>= 
+
+<span class="command">play b c2
+</span>= 
+
+<span class="command">play w c1
+</span>= 
+
+<span class="command">play b b1
+</span>= 
+
+<span class="command">play w e2
+</span>= 
+
+<span class="command">play b e1
+</span>= 
+
+<span class="command">play w f2
+</span>= 
+
+<span class="command">play b f1
+</span>= 
+
+<span class="command">play w f3
+</span>= 
+
+<span class="command">play b g3
+</span>= 
+
+<span class="command">play w g1
+</span>= 
+
+<span class="command">play b g5
+</span>= 
+
+<span class="command">play w g4
+</span>= 
+
+<span class="command">play b e5
+</span>= 
+
+<span class="command">play w a2
+</span>= 
+
+<span class="command">play b d6
+</span>= 
+
+<span class="command">play w a5
+</span>= 
+
+<span class="command">play b c6
+</span>= 
+
+<span class="command">play w b6
+</span>= 
+
+<span class="command">play b e7
+</span>= 
+
+<span class="command">play w b7
+</span>= 
+
+<span class="command">play b a7
+</span>= 
+
+<span class="command">play w c7
+</span>= 
+
+<span class="command">solve
+</span><span class="test">#? [unknown]
+= unknown
+
+</span></pre>
+<hr style="margin:1em" size="1">
+<pre style="margin:1em">
+</span>cputime
+? Unknown command
+
+quit
+= 
+
+</pre>
+<hr style="margin-bottom:0" size="1">
+<p style="margin-top:1; margin-right:5" align="right"><i><small>Generated on 2/28/17 7:17 PM by gogui-regress 1.4.9 (<a href="http://gogui.sf.net">http://gogui.sf.net</a>)</small></i></p>
+</body>
+</html>

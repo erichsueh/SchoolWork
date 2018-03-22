@@ -1,0 +1,163 @@
+#Private test file, with test cases that are independant of the public test case#These tests are written for NoGo.
+
+#1.) Tests for auto resign, where program knows there is no winning move
+boardsize 1
+clear_board
+solve
+#?[resign]
+
+#2.) Tests for proper output of opponent winning, which does not include output #of the winning move.
+boardsize 3
+clear_board
+play b a1
+solve
+#?[b]
+
+#3.) Same as test case 2 but to check if program outputs properly for white
+#winning as the opponent
+boardsize 3
+clear_board
+play w a1
+solve
+#?[w]
+
+#4.)Test for larger board size to solve
+
+boardsize 7
+clear_board
+play b d4
+play w c4
+play b e4
+play w d3
+play b e6
+play w f4
+play b f5
+play w c5
+play b d5
+play w a3
+play b b4
+play w a4
+play b b3
+play w d2
+play b c2
+play w c1
+play b b1
+play w e2
+play b e1
+play w f2
+play b f1
+play w f3
+play b g3
+play w g1
+play b g5
+play w g4
+play b e5
+play w a2
+play b d6
+play w a5
+play b c6
+play w b6
+play b e7
+play w b7
+play b a7
+play w c7
+play b g7
+play w d7
+play b f7
+play w f6
+play b a1
+play w c3
+play b e3
+solve
+#? [w b5]
+
+#5.) Tests for timeout
+boardsize = 10
+clear_board
+play w a1
+solve
+#? [Unknown]
+
+#6.) Test for multiple possible winning moves
+boardsize 2
+clear_board
+play w a1
+play b a2
+solve
+#? [w b1|w b2]
+
+#7.) Test for multiple possible winning moves on 3x3 board
+boardsize 3
+clear_board
+play w a1
+play b c3
+play w a2
+play b c2
+play w b2
+play b b1
+solve
+#? [w a3|w b3 ?]
+
+#8.)Tests for resign function during proper play
+
+boardsize 2
+clear_board
+play w a1
+play b a2
+play w b1
+solve
+#? [resign]
+
+#9.) Test for a large amount of time, should never fail to produce a winner.
+
+boardsize 2
+clear_board
+timelimit 10
+play w a1
+play b a2
+solve
+#? [w b1|w b2]
+
+#10.) Larger board size, more time, more moves to solve
+boardsize 7
+clear_board
+time limit 15
+play b d4
+play w c4
+play b e4
+play w d3
+play b e6
+play w f4
+play b f5
+play w c5
+play b d5
+play w a3
+play b b4
+play w a4
+play b b3
+play w d2
+play b c2
+play w c1
+play b b1
+play w e2
+play b e1
+play w f2
+play b f1
+play w f3
+play b g3
+play w g1
+play b g5
+play w g4
+play b e5
+play w a2
+play b d6
+play w a5
+play b c6
+play w b6
+play b e7
+play w b7
+play b a7
+play w c7
+solve
+
+#? [?]
