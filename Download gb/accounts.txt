@@ -1,0 +1,10 @@
+Bob:234.70
+Tom Johnson:791.56
+Anna:3260.55
+Jill:-23.76
+Mike Smith:Not_A_Float!
+Timothy James Lee:1022.71
+Sarah Smith:-567.30
+George:eleven
+Vanessa:43781.43
+Mr. X:417.99

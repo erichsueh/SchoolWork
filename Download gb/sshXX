@@ -1,0 +1,40 @@
+#!/bin/sh
+XX=$1
+USER=$2
+
+if [ "$#" != "2" ]; then
+  echo ""
+  echo "Usage:  sshXX XX CCID"
+  echo "  Where XX is your student group and CCID is your Campus Computing ID"
+  echo ""
+  echo "  NB:  Remember you must use the CS333 password assigned to you"
+  echo ""
+  exit
+fi
+
+CS333="cs333.cs.ualberta.ca"
+# CS333="142.244.87.5"
+
+# echo "vncview localhost:5901 -> Fw$XX"
+# You'll have to add a rule '-L 5901:10.229.$XX.1:5900' to the ssh below
+# Won't work unless vncserver is started on Fw$XX, but there is a route
+# that connects the external interface to the internal one.  Vncserver should
+# not be started until the students are prepared to give it a password and
+# protect it
+
+echo "Win$XX:"
+echo "  krdc"
+echo "  ssh -p 2222 student@localhost"
+echo "  vncviewer localhost:5902"
+echo "  scp -P 2222 file student@localhost:"
+echo ""
+echo "Fw$XX:"
+echo "  ssh -p 2221 root@localhost"
+echo "  scp -P 2221 file root@localhost:"
+echo ""
+
+ssh -L 5902:10.229.$XX.2:5900 \
+-L 2221:10.229.$XX.1:22 \
+-L 2222:10.229.$XX.2:22 \
+-L 3389:10.229.$XX.2:3389 \
+$CS333 -l $USER
