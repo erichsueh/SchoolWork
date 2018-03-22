@@ -1,0 +1,29 @@
+SPIM Version 8.0 of January 8, 2010
+Copyright 1990-2010, James R. Larus.
+All Rights Reserved.
+See the file README for a full copyright notice.
+Loaded: /usr/lib/spim/exceptions.s
+MOV R12, R12 LR 31
+MOV R0, R0
+AND R9, R4, R8
+MOV R2, R9 LL 24
+MOV R0, R0
+MOV R0, R0
+AND R9, R4, R8
+MOV R9, R9 LL 8
+OR R2, R2, R9
+MOV R8, R8 LL 8
+AND R9, R4, R8
+MOV R0, R0
+OR R2, R2, R9
+MOV R8, R8 LL 8
+AND R9, R4, R8
+MOV R9, R9 LR 24
+OR R2, R2, R9
+AND R2, R2, 255
+CMP S R8, R2
+BEQ 8
+CMP S R8, R8
+BEQ 4
+MOV R2, R2 AR 16
+BX R14

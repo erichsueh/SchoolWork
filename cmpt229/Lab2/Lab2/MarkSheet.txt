@@ -1,0 +1,44 @@
+
+		CMPUT 229 Laboratory Assignment #2
+		==================================
+
+Final Mark:           /100 MARKS TOTAL
+                =====
+Part 1:         _____ /30 countAccess
+
+Part 2:         _____ /25 readHex
+
+Part 3:         _____ /25 printHex
+
+Part 4:		_____ /20 Style
+
+-------------------------------------------------------------------------
+Part 1: countAccess
+
+ _____ /30
+
+	count01 ____ /10 count02 ____ /10 count03 ____ /10
+
+------------------------------------------------------------------------
+Part 2: readHex
+
+ _____ /25
+
+	read01 _____ /25
+------------------------------------------------------------------------
+Part 3: printHex
+
+ _____ /25
+
+	write01 _____ /25
+------------------------------------------------------------------------
+Part 4: Style
+
+ _____ /20
+ 
+Some common deductions will include: (5 marks per deduction)
+	No subroutine description
+	No program header
+	No explanation for register usage
+	No block comments
+

@@ -1,0 +1,23 @@
+1. Number = 35
+2. 0000d3
+3. 00400038
+4. 6 lw executed: 14, 22,34, 56,13, 0
+5.N:10010018, u:10010019, m:10010020, b10010021,e10010022,r10010023
+6.0x3344003c
+7. 
+00111100, 00000000, 01000100, 00110011
+11000011, 11111111, 10111011, 11001100
+196, 256,188,204
+8. 
+.word stores the n32- bit quantities in successive memory words stored in 10010000,10010004,10010008, 10010012
+.byte stores the n values in successive bytes of memory
+10010017
+.align 2 aligns the next value on a word boundary
+.space allocates n bytes of space in the current segment str in memory and null-terminate it
+.asciiz store the string
+10010029,10010030, 10010031,10010032
+.ascii store the string str in memory but does not null-terminate it
+10010034, 10010035
+9. print $s0
+10.You would need a loop
+

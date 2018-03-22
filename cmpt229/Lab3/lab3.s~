@@ -1,0 +1,7 @@
+.data
+
+.align 2
+.space 1024
+
+main:
+	

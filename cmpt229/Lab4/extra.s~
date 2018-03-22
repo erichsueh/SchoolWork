@@ -1,0 +1,21 @@
+	.kdata
+s1:	.word 0
+s2:	.word 0
+	.ktext 0x80000180
+# Select the appropriate one for the mode in which SPIM is compiled.
+	.set noat
+	move $k1 $at		# Save $at
+	.set at
+	sw $v0 s1		# Not re-entrant and we can't trust $sp
+	sw $a0 s2		# But we need to use these registers
+
+	mfc0 $k0 $13		# Cause register
+	srl $a0 $k0 2		# Extract ExcCode Field
+	andi $a0 $a0 0x1f
+		
+	li $t0 100
+	mtc0 $t0 $11
+	li $t0 0
+	mtc0 $t0 $t9
+	
+	eret

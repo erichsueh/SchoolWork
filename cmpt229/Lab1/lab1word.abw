@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE abiword PUBLIC "-//ABISOURCE//DTD AWML 1.0 Strict//EN" "http://www.abisource.com/awml.dtd">
+<abiword template="false" xmlns:ct="http://www.abisource.com/changetracking.dtd" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:math="http://www.w3.org/1998/Math/MathML" xid-max="29" xmlns:dc="http://purl.org/dc/elements/1.1/" styles="unlocked" fileformat="1.0" xmlns:svg="http://www.w3.org/2000/svg" xmlns:awml="http://www.abisource.com/awml.dtd" xmlns="http://www.abisource.com/awml.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" version="0.99.2" xml:space="preserve" props="dom-dir:ltr; document-footnote-restart-section:0; document-endnote-type:numeric; document-endnote-place-enddoc:1; document-endnote-initial:1; lang:en-US; document-endnote-restart-section:0; document-footnote-restart-page:0; document-footnote-type:numeric; document-footnote-initial:1; document-endnote-place-endsection:0">
+<!-- ======================================================================== -->
+<!-- This file is an AbiWord document.                                        -->
+<!-- AbiWord is a free, Open Source word processor.                           -->
+<!-- More information about AbiWord is available at http://www.abisource.com/ -->
+<!-- You should not edit this file by hand.                                   -->
+<!-- ======================================================================== -->
+
+<metadata>
+<m key="abiword.date_last_changed">Wed Sep 16 15:31:45 2015
+</m>
+<m key="abiword.generator">AbiWord</m>
+<m key="dc.creator">Eric Hsueh</m>
+<m key="dc.date">Wed Sep  9 15:19:41 2015
+</m>
+<m key="dc.format">application/x-abiword</m>
+</metadata>
+<rdf>
+</rdf>
+<history version="6" edit-time="9163" last-saved="1442439105" uid="e7151102-572f-11e5-9ae0-8413d053ce8f">
+<version id="1" started="1441833581" uid="7bc4a56c-5738-11e5-9ae0-8413d053ce8f" auto="0" top-xid="6"/>
+<version id="6" started="1442434968" uid="54a9059a-5cba-11e5-9e40-ab9d97534a48" auto="0" top-xid="7"/>
+</history>
+<styles>
+<s type="P" name="Normal" followedby="Current Settings" props="font-family:Times New Roman; margin-top:0pt; color:000000; margin-left:0pt; bgcolor:transparent; widows:2; font-style:normal; text-indent:0in; text-position:normal; margin-bottom:0pt; font-weight:normal; line-height:1.0; text-align:left; font-variant:normal; text-decoration:none; margin-right:0pt; font-size:12pt; font-stretch:normal"/>
+</styles>
+<pagesize pagetype="Letter" orientation="portrait" width="8.500000" height="11.000000" units="in" page-scale="1.000000"/>
+<section xid="2" props="page-margin-footer:0.5in; page-margin-header:0.5in">
+<p style="Normal" xid="3">1. Number = 35<c></c></p>
+<p style="Normal" xid="1">2. 0000d3<c></c></p>
+<p style="Normal" xid="4">3. 00400038<c></c></p>
+<p style="Normal" xid="5">4. 6 lw executed: 14, 22,34, 56,13, 0</p>
+<p style="Normal" xid="6">5.N:10010018, u:10010019, m:10010020, b10010021,e10010022,r10010023</p>
+<p style="Normal" xid="8">6.0x3344003c</p>
+<p style="Normal" xid="9">7. </p>
+<p style="Normal" xid="11">00111100, 00000000, 01000100, 00110011</p>
+<p style="Normal" xid="12">11000011, 11111111, 10111011, 11001100</p>
+<p style="Normal" xid="13">196, 256,188,204</p>
+<p style="Normal" xid="14">8. </p>
+<p style="Normal" xid="18"><c></c>.word stores the n32- bit quantities in successive memory words stored in 10010000,10010004,10010008, 10010012</p>
+<p style="Normal" xid="19">.byte stores the n values in successive bytes of memory</p>
+<p style="Normal" xid="24">10010017</p>
+<p style="Normal" xid="16">.align 2 aligns the next value on a word boundary</p>
+<p style="Normal" xid="17">.space allocates n bytes of space in the current segment str in memory and null-terminate it</p>
+<p style="Normal" xid="21">.asciiz store the string</p>
+<p style="Normal" xid="25">10010029,10010030, 10010031,10010032</p>
+<p style="Normal" xid="23">.ascii store the string str in memory but does not null-terminate it</p>
+<p style="Normal" xid="26">10010034, 10010035</p>
+<p style="Normal" xid="27">9. print $s0</p>
+<p style="Normal" xid="29"><c></c></p>
+</section>
+</abiword>

@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+	<title>229 Lab - Timer Implementation</title>
+<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+<h1>Timer Implementation</h1>
+<h2>Information</h2>
+<p>
+In this lab, you will be learning about how the processor and memory architecture interact with other parts of the machine. Instead of using syscalls, in this assigment you will handle all input and output using interruption handlers and memory-mapped device access. 
+</p>
+<h3>Interrupts</h3>
+<p>Interrupts must be enabled in order to complete this project. To enable interrupts, set bit 0 of coprocessor 0's Status register (<tt>$12</tt>) to 1. The interruption mask in the status register also needs to be modified. Keyboards cause a level 1 interrupt, and the timer causes a level 5 interrupt. Setting bits 11 and 15 of the status register enables both interrupts.
+</p>
+
+<p> Whenever an exception is raised or an interrupt occurs, the processor jumps to address <tt>0x80000180</tt>. Normally SPIM will place the default exception handler at that address. Therefore you need to turn off the default exception handler using the command line argument <tt>-notrap</tt>. To place your own handler at that address use the directive <tt>.ktext 0x80000180</tt> at the beginning of your handler code. Your handler can determine whether a timer interrupt or a keyboard interrupt occurred, and perform the appropriate operation before returning to your main code using <tt>eret</tt>, the MIPS Exception Return statement.</p>
+
+<h4>Timer</h4>
+
+<p> The MIPS architecture implements timing functionality in coprocessor 0, which is a convenient way to offload timing to another device. The processor is able to continue executing instructions until the coprocessor raises an interrupt when the specified quatity of time has elapsed. Only one timer can be running at a time, so it is the programmer's responsibility to reset recurring timers.</p>
+
+<p>A timer function can be implemented using registers <tt>$9</tt> and <tt>$11</tt> of coprocessor 0. The value in register <tt>$9</tt> of coprocessor 0 is incremented every 10<i>ms</i> --- if it reaches the maximum integer value, it resets to zero and continues incrementing. Whenever the values in register <tt>$9</tt> and the value in register <tt>$11</tt> become equal, a timer interruption is raised. These coprocessor 0 registers can be set using the instruction <tt>mtc0	[local register], [coproc register]</tt>, and read using <tt>mfc0	[coproc register], [local register]</tt>.</p>
+
+<img src="causeReg.png" class="right">
+<h4>Cause Register</h4>
+<p>The cause of an exception can be found in register <tt>$13</tt> of coprocessor 0. It can be accessed using the instructions above, but it isn't a register in the true sense, and shouldn't be written to. As shown in the diagram, only some fields are filled, and specifically bits <tt>11</tt> and <tt>15</tt> are useful for this assignment. Your exception handler needs to mask these bits out in order to determine whether the interrupt was caused by the timer or the keyboard.</p>
+
+<h3 style="clear:both">Memory-Mapped IO</h3>
+<p>Memory-mapped IO allows interaction with external devices through an interface pretending to be system memory. This mapping allows the processor to communicate with these devices using the  load-word and store-word instructions. Generally devices have 2 memory addresses associated with them, one acting as a control channel, which relays information about the device's state, and the other acting as a data channel, which relays data to and from a device. In order to enable memory-mapped IO in spim, the command line argument <tt>-mapped_io</tt> must be used.</p>
+
+<p>The keyboard control register is mapped to address <code>0xffff 0000</code>. Set bit 1 to enable interrupts. When a keyboard interrupt occurs (ie. a key is pressed) the hardware will set Bit 0 of the control register.</p>
+
+<p>The keyboard data register is mapped to address <code>0xffff 0004</code>. The ASCII keycode of the last character typed will be stored in this register.</p>
+
+<p>The display control register is mapped to address <code>0xffff 0008</code>. Your code should poll bit 0 (i.e. check it inside a loop) to see when the display is ready for output. The display will set bit 0 when it is ready for the next character. </p>
+
+<p>The display data register is mapped to address <code>0xffff 000C</code>. When the display is ready for data, storing an ASCII code here will result in the corresponding character being written to the screen.</p>
+
+<p>It makes sense to both read from and write to control registers - you'll read bit 0 to see whether a keyboard interrupt has occurred, or whether the display is ready and you'll write bit 1 to enable interrupts. As for the data registers, it only makes sense to read the keyboard data register to retrieve the character the user has typed, and it only makes sense to write the display data register, to output a character.</p>
+
+<h2>Assignment</h2>
+<p>
+Your assignment is to write a countdown timer in MIPS assembly, that reads in a time in seconds, counts down that time to zero, and then quits. Without using any reading or printing syscalls, it must do all of the following:
+</p>
+<ul>
+<li>Upon starting, display <code>Seconds=</code> on screen.</li>
+<li>Allow the user to enter digits, showing them on-screen</li>
+<li>When the user presses enter, move to a new line and begin displaying the countdown timer with the following format: <code>mm:ss</code>. The timer must be updated in-place and not keep printing across the line or down lines</li>
+<li>When 'q' is pressed, or when the timer reaches 00:00, quit the application</li>
+<li>For all other key presses, do nothing.</li>
+</ul>
+<p>
+Here is a method to do in-place updating of the text: in xfce4-terminal, the ASCII backspace character moves the cursor back, allowing you to write over previous characters. If you will be using a different terminal, you will need to specify which one your lab was tested with so TAs can do the same. You'll also need to run spim with the <code>-notrap</code> and <code>-mapped_io</code> arguments. For inspiration regarding the exception handler,  you can look at the default SPIM exception handler, located in the lab machines at <code><b>/usr/lib/spim/exceptions.s</b></code>, and use it as a starting point. </p>
+<h2>Resources</h2>
+  <p> Slides used for introduction of the lab (<a href="Lab_Timer_Class_pres.ppt">.ppt</a>) (<a href="Lab_Timer_Class_pres.pdf">.pdf</a>)</p>
+  <p> Slides used for in-lab introduction of the lab (<a href="Lab_Timer_Lab_pres.pdf">.pdf</a>)</p>
+
+<h2>Marking Guide</h2>
+<p>
+Assignments too short to be adequately judged for code quality will be given a zero.
+</p>
+<ul>
+<li>20% For code cleanliness, readability, and comments</li>
+<li>8% For proper startup and prompt</li>
+<li>36% For proper response to Keyboard Input</li>
+<li>36% For proper Countdown display and behaviour</li>
+<li> Here is the <a href="MarkSheet.txt">mark sheet</a> used for grading</li>
+</ul>
+<h2>Submission</h2>
+<p>
+There is a single file to be submitted for this lab. The file name should be <tt>lab4.s</tt> and it should contain the code for both the interrupt handler and the main (i.e. your file must contain all the code for a successful stopwatch execution). Use the link provided in the course page for submission.
+</p>

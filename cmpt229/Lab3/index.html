@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+	<title>229 Lab - Tree-based LRU Approximation</title>
+<link rel="stylesheet" type="text/css" href="styles.css" />
+</head>
+<body>
+<h1>Tree-based LRU Approximation</h1>
+<h2>Information</h2>
+<p>
+When swapping out an entry in an associative cache, it is ideal to swap out the least recently used entry, since it is the least likely entry to be used again. However, the implementation of a hardware mechanism that identifies the actual Least Recently Used (LRU) entry is too computationally expensive, increasing memory latency. Due to the time constraints involved, a variety of LRU approximation methods exist. A specific variation of such algorithms uses a tree to determine an LRU approximation and is used in the IBM POWER4 architecture. In this assignment you will implement this approximation algorithm in assembly.
+</p>
+<p> The animation below illustrates how the tree-based LRU approximation algorithm works. On the left there is a sequence of memory references. In this simplified view, each memory reference contains a bit field that identifies the entry in a cache set that is being referenced. On the right, there is a binary tree that is used to keep track of the Most-Recently Used (MRU) entry and also to approximated the Least Recently Used (LRU) entry. The bits stored in each node of the binary tree are updated as explained below. The grey arrows indicate a path to the MRU entry while the black arrows indicate a path to the LRU entry. The box in the lower left of the animation displays the LRU approximation after each reference is processed as indicated by the blue arrow.</p>
+
+<img src="treeanim.gif" width=400 height=250>
+<p>
+In order to implement this tree-based algorithm for LRU approximation, the <tt>n</tt> entries in a set in an <tt>n</tt>-way set-associative cache are divided into 2 separate groups recursively until each group contains only one entry at the leaves of the tree. Each node of the binary tree stores one bit to indicate which direction to follow to find the tree leaf representing the least-recently used entry. This lab will use the following convention: a node with a "<tt>0</tt>" indicates that the left path should be followed to find the most-recently used entry, while a node with a "<tt>1</tt>" indicates that the right path should be followed. In the animation the grey arrows indicate the path to the most recently used entry. Thus a traversal from the root of the tree that goes left on a "<tt>0</tt>" node and goes right on a "<tt>1</tt>" node leads to the MRU entry. However what the algorithm seeks to compute is an approximation to the LRU entry. Therefore to find a good LRU approximation simply execute a traversal from the root of the tree following right on a  "<tt>0</tt>" node and following left on a "<tt>1</tt>" node (bold arrows in the animation). The entry found by this traversal is the entry that would be replaced when a cache swap is needed.
+</p>
+<p> A cache is referred to as being <tt>n</tt>-<i>way set associative</i> if, given a memory address requested by the processor, there are <tt>n</tt> possible cache entries that could be used to store data for that address. The tree-based LRU approximation algorithm that you will write will return the LRU entry that would be returned after a stream of memory references. Each memory reference is to one of the entries represented by the leafs in the tree.</p>
+<p>For an <tt>n</tt>-way set associative cache, each entry identifier will be <i>log</i><sub><i>2</i></sub>(<tt>n</tt>) bits. While logarithms may be challenging to compute in assembly, it is fairly easy to compute a base 2 logarithm for powers of two (which, as noted below, are our only test cases), using the algorithm below where <tt>associativity</tt> is a 32-bit value:
+</p>
+<pre>
+  input: associativity 
+         counter &lt;-- 0
+  loop:
+	if bit 0 of associativity is set,
+          go to done
+	shift associativity right 1
+	increment counter
+	jump loop
+  done:
+	return counter
+</pre>
+<h4>Binary Trees</h4>
+<p>Binary trees are simple to create and traverse in MIPS, and far more memory efficient than storage using bytes or words. A binary tree can begin as a contiguous block of space, the first bit of which is designated the root. From there, tree traversal is trivial. Simply use the algorithm:
+<pre>
+bitOffset(Child-0) = bitOffset(Parent)*2
+bitOffset(Child-1) = bitOffset(Parent)*2 + 1
+bitOffset(Parent)  = floor(bitOffset(Child)/2)
+</pre>
+<p>You will need to handle converting the bit offset into a memory address, and isolating the necessary bits for your accesses.</p>
+<h2>Assignment</h2>
+
+<!--<b> Nelson: Looking at the figure, I think that there is a major misunderstanding about the semantics of the bits read in the stream. The bits DO NOT identify a path in the tree, they do identify one of the leafs of the tree. Therefore, in your example you have the following references in your stream:<br>
+
+00000 10111 11101 00100 11011 01010 10101<br>
+
+This means that leafs 0, 23, 29, 4, 27, 10, and 21. We need to specify the initialization for the tree that <code>Start Cache</code> should use. For instance we could specify that initially every bit in the tree will be initialized so that the "0" bit is to the left. Therefore the LRU entry is entry 0.<br>
+
+Now the reference to leaf 0 will switch all bits along the path from the leaf to the root to 1.<br>
+
+Then the reference to leaf 23 will flip all the bits from that leaf to the root, etc.<br>
+
+Once all the references are processed, all we have to do is to do a traversal of the tree from the root to the leafs following the 0 bits.
+</b> --> 
+<p>
+You will implement a simulator for the algorithm that approximates LRU based on the tree representation described above. Your simulator will receive as input a bit stream that represents the references made by a processor, or a collection of processor cores, to the cache. Each reference in the bit stream will identify the entry  that is being accessed by the reference. In an actual hardware, identifying the entry would require the processor to decompose the address in its parts and then to compare the tags with all the tags in the cache to find a match.
+
+Your implementation of this algorithm will use 0 and 1 to refer to the left and right elements at each node of the tree, respectively. Your solution will
+return the approximated LRU entry after a stream of memory references. To this end, you will implement the following functions:
+</p>
+<ul>
+  <li><tt>startCache</tt>
+    <ul>
+      <li><b>Arguments:</b>
+	<ul> 
+	  <li> <tt>$a0</tt> = the associativity of the cache.</li>
+	</ul>
+      </li>
+      <li><b>Return Values:</b> None</li>
+      <li><b>Execution:</b> This function will be called only once, right at the beginning of execution, and should be used to set up your cache simulation. All the nodes of your binary tree should be initialized to zero, meaning that the beginning LRU entry should be entry 0.</li>
+      </ul>
+  </li>
+  <li><tt>getLRU</tt>
+    <ul>
+      <li><b>Arguments:</b> 
+	<uL>
+	  <li> <tt>$a0</tt> = pointer to a stream of bits</li>
+	  <li> <tt>$a1</tt> = the number of references to be read from this stream.</li>
+	</ul>
+      </li>
+      <li><b>Return Values:</b>
+	<ul>
+<li><tt>$v0</tt> = the identifier of the approximated LRU entry in the <i>log</i><sub><i>2</i></sub>(<tt>n</tt>) least significant bits of <tt>$v0</tt>. For instance, in a 32-way set associative cache, if the entry <tt>10011</tt> is the LRU approximation to be returned, then the value returned in <tt>$v0</tt> should be:
+	    <pre>
+	      <tt>$v0 = 0000 0000 0000 0000 0000 0000 0001 0011</tt>
+	    </pre>
+	  </li>
+	</ul>
+      </li>
+      <li><b>Execution:</b> read the number specified the references from the stream of bits. Each entry is formed by  <i>log</i><sub><i>2</i></sub>(<tt>n</tt>) bits, where <tt>n</tt> is the associativity of the cache, and corresponds to one of the entries in the LRU tree. Each reference will be used to update the LRU tree according to the LRU approximation algorithm specified above. After the last reference has been processed, return the approximation to the the LRU entry. </li>
+    </ul>
+  </ul>
+
+<p>The following illustration is an example for a cache with associativity 32, where the address of the stream of references is <tt>0x1001 0044</tt> and the stream contains 7 references. The figure illustrates how the references are organized within each word. In this example, each reference has five bits.</p>
+
+<img src="bitstream.png" />
+<p>When a reference to a given entry is processed, the algorithm traverses the tree from the leaf up to the root setting the bit in each node to the correct value. If the traversal arrives at a node from the left, the bit is set to "<tt>0</tt>". If the traversal arrives at a node from the right, the bit is set to "<tt>1</tt>". If you concatenate the bits from the root to tree entry <tt>10111</tt>, you will have <tt>01000</tt>, the negation of <tt>10111</tt>.</p>
+<img src="sampleIdentifier.png" />
+
+<h3>Notes</h3>
+<ul>
+<li>Running with an associativity that is not a power of 2 causes undefined behavior and will not be tested.</li>
+<li>The references in the bit stream are allowed to cross over word boundaries. Thus, make sure that you handle this situation correctly.</li>
+<li>For this assignment, please make sure you follow the caller/callee register saving convention appropriately.</li>
+</ul>
+
+
+<h3>Obligations for Caller and Callee Routines</h3>
+
+<p>Linkage conventions vary from architecture to architecture. There may also be slight differences between different operating systems on the same architecture. In general, though, there are certain registers that a routine can use as "temporary" or "scratch" areas and others that, according to the linkage convention, must be preserved across a call.</p>
+
+<p>For this reason, in the MIPS architecture, the registers <tt>$t0 - $t9</tt>  are considered "temporary". These multi-purpose registers can be used for anything during a normal routine execution; thus, a programmer can always assume he has this registers at his disposal. This also implies that a programmer who wish to keep the value of any of these registers before a subroutine call must make a copy of this data before calling and restore it after the call. These registers are referred to as <b>caller-saved</b> registers.</p>
+
+<p>On the other hand, registers <tt>$s0 - $s7</tt>  are considered "source" registers. As a programmer, you should always assume no other subroutine will disrupt the values of this set of registers. If a subroutine uses any of these, it is an obligation to save them first, and restore the original values before it returns control to the oringinal caller. These registers are referred to as <b>callee-saved</b> registers.</p>
+
+<p>Only the registers that are actually used must be saved and restored. For efficiency, a caller should only save/restore <tt>$t</tt> registers that contain a variable whose value will be used after the call. In compiler parlance, a register that contains a value that will be used later in the program is called a live variable. Likewise, a subroutine should only save/restore <tt>$s</tt> registers that it modifies.</p>
+
+<p>Therefore, we may need a place to save and restore registers in the caller and in the callee. One possibility would be to allocate dedicated space in the data segment. That would be fine if there is never any possibility that the routine will be in use multiple times concurrently. However, recursive or re-entrant code is fairly common, and cannot use this approach. (What might happen if it did?)</p>
+
+<p>One nice solution is to use an "activation record" for every routine currently being executed, and store information about each invocation of a routine in its activation record. This will include values of registers that need to be saved and restored. To keep the management of activation records simple, we can store them in a stack. These activation records are called "frames" and thus they are refereed to as "stack frames." Organizing information about the active routines this way has some nice side effects for debugging and monitoring systems. For example, to find out what is currently executing we simply look at the frame that is on the top of the stack. To trace the sequence of calls that led to the current routine being activated, we simply trace through the frames on the stack.</p>
+
+<p>When a routine needs to save the values of some registers, it simply pushes them onto the stack, in its stack frame. When the values need to be restored, they're just popped off the stack. The frame of a routine is also used to allocate space for variables that are local to the routine.</p>
+
+<p>Always remember: the stack is just an area in main memory that we are using in a special way, by pushing things onto it and popping them off. You can think of it as supplementing the registers, but always remember that it is actually kept in main memory. Data in the stack must be loaded and stored in the same way as any other data in the machine.</p>
+
+<p>The MIPS architecture has two special registers, <tt>$fp</tt> and <tt>$sp</tt>, that can be used to manage stack frames. <tt>$fp</tt>  is the frame pointer, and points to the beginning of the frame of the procedure that is currently executing. The value of <tt>$fp</tt>  changes only on entry to and exit from a procedure - during the body of the procedure, its value is constant. <tt>$sp</tt> is the stack pointer: it should always point to the last location in use on the stack. The value of <tt>$sp</tt> may change during the execution of a procedure when values are pushed onto and popped off the stack.</p>
+
+<p>The <tt>$fp</tt> register, known as the frame pointer is used when referencing values stored in the stack frame because the offset of a value saved in the frame is constant relative to <tt>$fp</tt>.</p>
+
+<p>The <tt>$sp</tt> register, known as the stack pointer is used when adding values to or removing values from the stack because it tracks the current extent of the stack.</p>
+
+<h4>Short code example (Caller-saved)</h4>
+
+
+
+<pre>
+# Set up our frame 
+addi $sp, $sp, -4 
+sw   $fp, 0($sp) 
+move $fp, $sp  
+# Grow the stack 
+addi $sp, $sp , -8 
+# Store our values (assume that this caller must save $t0)
+sw   $ra, -4($fp) 
+sw   $t0, -8($fp)
+   ... 
+# Now we can safely jal 
+jal  some_sub
+   ...  
+# Restore our values 
+lw   $ra, -4($fp) 
+lw   $t0, -8($fp) 
+# Unwind 
+addi $sp, $sp, 12
+lw   $fp, -4($sp)
+jr   $ra
+</pre>
+<table>
+
+
+<h2>Resources</h2>
+<ul>
+  <li> Slides used for in-class introduction of the lab: (<a href="Lab_TreeDepth_Class_pres.pptx">.pptx</a>) (<a href="Lab_TreeDepth_Class_pres.pdf">.pdf</a>)</li>
+<li> Slides used for in-lab introduction of the lab (<a href="Lab_TreeDepth_Lab_pres_pub.pdf">.pdf</a>)</li>
+<li> <a href = "TestCases">Test Cases</a></li>
+<li> Here is some <a href="ReadAccrossWordBoundary.pdf">pseudo-code</a> to help you think about how to write code to read a bitfield that spans over a word boundary.
+</ul>
+<h2>Marking Guide</h2>
+<p>
+Assignments too short to be adequately judged for code quality will be given a zero.
+</p>
+<ul>
+<li>10% For code cleanliness, readability, and comments</li>
+<li>12% For correctly initializing the cache simulator</li>
+<li>54% For correctly parsing various types of entries</li>
+<li>12% For not altering the cache in non-writing function calls</li>
+<li> Here is the <a href="MarkSheet.txt">mark sheet</a> used for grading</li>
+</ul>
+<h2>Submission</h2>
+<p>
+There is a single file to be submitted for this lab. The file name should be <tt>lab3.s</tt> and it should contain only the code for the functions specified above. Make sure to not include a main function in your solution. Use the link provided in the course page for submission.
+</p>

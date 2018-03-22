@@ -1,0 +1,58 @@
+
+		CMPUT 229 Laboratory Assignment #3 - Lab_TreeDepth
+		==================================================
+
+Final Mark:           /100 MARKS TOTAL
+                =====
+Part 1:         _____ /14 Correct Initialization
+
+Part 2:         _____ /49 Correct Entry Parsing
+
+Part 3:         _____ /7 Very Large Caches
+
+Part 4:		_____ /14 Non-writing calls correct
+
+Part 5:		_____ /16 Style
+
+-------------------------------------------------------------------------
+Part 1: Correct Initialization
+
+ _____ /14
+
+	Test 1 ____ /7 Test 2 ____ /7
+
+------------------------------------------------------------------------
+Part 2: Correct Entry Parsing
+
+
+ _____ /49
+
+	Test 3 _____ /7 Test 4 _____ /7 Test 5 _____ /7
+
+	Test 6 _____ /7 Test 7 _____ /7 Test 8 _____ /7
+
+	Test 9 _____ /7
+------------------------------------------------------------------------
+Part 3: Very Large Caches
+
+ _____ /7
+
+	Test 10 ____ /7   
+------------------------------------------------------------------------
+Part 4: Non-writing calls correct
+
+ _____ /14
+
+	Test 11 ____ /7 Test 12 ____ /7
+      
+------------------------------------------------------------------------
+Part 5: Style
+
+ _____ /16
+ 
+Some common deductions will include: (5 marks per deduction)
+	No subroutine description
+	No program header
+	No explanation for register usage
+	No block comments
+

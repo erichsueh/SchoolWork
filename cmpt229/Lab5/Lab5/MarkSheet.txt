@@ -1,0 +1,46 @@
+
+		CMPUT 229 Laboratory Assignment #5
+		==================================
+
+Final Mark:           /100 MARKS TOTAL
+                =====
+Part 1:         _____ /75 Instructions
+
+Part 2:         _____ /15 Functions
+
+Part 3:		_____ /10 Style
+
+-------------------------------------------------------------------------
+Part 1: Instructions
+
+ _____ /75
+
+	add _____ /5 addi ____ /5 and _____ /5
+	
+	andi ____ /5 beq _____ /5 bgez ____ /5
+	
+	jr  _____ /5 or  _____ /5 ori _____ /5
+
+	sll _____ /5 sllv ____ /5 sra _____ /5
+
+	srl _____ /5 srlv ____ /5 sub _____ /5
+
+------------------------------------------------------------------------
+Part 2: Functions
+
+
+ _____ /15
+
+	Ascii2Int ____ /5 TwoPowers ____ /5 Fibonacci ____ /5
+
+------------------------------------------------------------------------
+Part 3: Style
+
+ _____ /10
+ 
+Some common deductions will include: (5 marks per deduction)
+	No subroutine description
+	No program header
+	No explanation for register usage
+	No block comments
+

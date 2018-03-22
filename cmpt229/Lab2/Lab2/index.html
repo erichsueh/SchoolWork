@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+	<title>229 Lab - Hexadecimal Representation and Tables</title>
+</head>
+<body>
+<h1>Hexadecimal and Tables</h1>
+<h2>Information</h2>
+<h3>Hexadecimal</h3>
+<p>The hexadecimal numbering system (base 16) is used commonly in computing science, due to its easy translation to and from binary. Compared to binary, hexadecimal is extremely succinct, representing 4 binary digits with a single hexadecimal digit. Hexadecimal, unlike decimal, can be translated to binary digit by digit, with digits not affecting each other in the binary result.</p>
+<img src="hexbin.png">
+<p>Due to this direct correlation, the algorithm to create a binary number from ASCII hexadecimal digits to a binary integer only involves  converting the ASCII digit to the value it represents, and shifting left 4 before <tt>or</tt>ing in the next hexadecimal digit.</p>
+<p>Going from a binary number to ASCII hexadecimal is similarly simple, involving masking out each 4-bit section and converting it to its associated ASCII character. A full table of ASCII characters can be found <a href="http://www.asciitable.com">here</a>.</p>
+<h3>Tables</h3>
+<p>A table in assembly is simply a known amount of allocated space with a known base address. Depending on how many fields need to be in the table, fields in the same row can be stored in the same table or each field may be stored in a separate table while all the fields corresponding to the same entry share an index value. As a rule, in large tables with fields of differing alignments, for instance a word field and a byte field, it is more efficient to use two index-correlated tables than to allocate extra space or deal with unaligned word issues. If the alignments of all of the entries match, it is more efficient to use a spacially-correlated table.</p>
+<img src="tables.png">
+<h2>Assignment</h2>
+<p>
+Your job is to implement the following 3 functions:
+</p>
+<p>
+  <ul>
+
+    <li><tt>readHex</tt> : <br>
+      <ul>
+	<li> <b>Parameter:</b> <tt>$a0</tt> contains the memory address of the first character of a string of 8 ASCII characters. This string contains the ASCII hexadecimal representation of an unsigned integer. The string is <u>not</u> null terminated.</li>
+	<li><b> Return values:</b> 
+	  <ul>
+	    <li> <tt>$v1 = 1</tt> to indicate that a character other than  0-9, a-f, or A-F was encountered in the string. The value returned in <tt>$v0</tt> is irrelevant.</li>
+	    <li> <tt>$v1 = 0</tt> to indicate that the string was a valid ASCII hexadecimal representation of an unsigned integer. Return in <tt>$v0</tt> the integer value.</li>
+	  </ul>
+	</li>
+       <li> <b> Example:</b>
+	 If ReadHex finds that the string at the address in <tt>$a0</tt> is "ABcd1234" then the return values should be (expressed in binary):
+	 <ul>
+	   <li> <tt>$v1 = 0000 0000 0000 0000 0000 0000 0000 0000</tt>
+	   <li> <tt>$v0 = 1010 1011 1100 1101 0001 0010 0011 0100</tt>
+	 </ul>
+      </ul>
+    </li>
+ 
+    <li><tt>printHex</tt>: <br>
+	<ul>
+	  <li> <b>Parameter:</b> <tt>$a0</tt> contains an unsigned integer value</li>
+	  <li> <b>Output:</b> Prints the hexadecimal representation, including the leading <tt>0x</tt>, of the integer value using lowercase letters for the hexadecimal code, for example <tt>0x1234abcd</tt>. <tt>printHex</tt> uses system calls to print. <tt>printHex</tt> must print 8 hex characters independent of the integer value. Do not print a newline after printing the number.</li>
+	  <li> <b> Return values:</b> None</li>
+	  <li> <b> Example: </b> If <tt>$a0 = 1010 1011 1100 1101 0001 0010 0011 0100</tt> (expressed in binary), then printHex should print the string:<br>
+<tt>0xabcd1234</tt>
+</li>
+	</ul>
+    </li>
+
+<li><tt>createCountTable</tt>: 
+      <ul>
+	<li> <b>Execution:</b> This function must create a table for use with <tt>countIntegerAccess</tt>. It will be called only once, at the start of execution, and will create a table with enough room to track access counts for up to 200 arbitrary integers. The integers are unknown until they are passed as argument to <tt>countIntegerAccess</tt>, thus you will need a table capable of associating an arbitrary integer value with another value. You may choose how you implement this. No single integer will be accessed more than 255 times, thus a single byte is sufficient to store the counts. This function is part of the assignment just in case your design requires such a function for allocation of memory space for the table and initialization of variables. In some designs, <tt> createCountTable</tt> may do nothing. In that case it still should appear in your code, but it will simply have a <tt>jr $ra</tt> instruction.</li>
+<li> You can either allocate memory using the <tt>.data</tt> directive or else you may use the sbrk syscall to allocate memory dynamically. Either way, you can use a <tt>.data</tt> section in your subroutine to communicate the address of the table to the other subroutines: the other subroutines will access an address with a known label in this <tt>.data</tt> section to find the start address for the table. </li>
+</ul>
+ 
+    <li><tt>countIntegerAccess</tt>: 
+      <ul>
+	<li> <b>Parameter:</b> <tt>$a0</tt> is an arbitrary integer value</li>
+	<li> <b>Return values:</b> <tt>$v0</tt> is the number of times the particular value passed as argument has been accessed (including the one that occurs because of this invocation of <tt>countIntergerAccess</tt>).</li>
+	<li> <b>Execution:</b> <tt>countIntegerAccess</tt> must first search the count table to find out if this integer has already been accessed at least once. If so, the associated count must be incremented and returned. If not, the integer passed as argument must be added to the table, and its associated count initialized to 1 and returned. </li>
+</ul>
+</ul>
+
+<p>To assist you in the creation and testing of these functions, a MIPS testing file <a href="test.s">test.s</a> has been created for you. This testing file creates a simple interactive terminal which allows you to enter a hexadecimal number, uses <tt>readHex</tt> to convert it to an unsigned integer, <tt>countAccess</tt> to count the times that integer has been entered, and <tt>printHex</tt> to print the integer back in hexadecimal. This will allow you to ensure correctness across all your functions. When marking, values will be provided directly to each function, so ensure that your functions do not rely on previous execution of each other. During marking, no guarantees about input are provided beyond those indicated in the specifications for each function.</p>
+<h4>Notes</h4>
+<ul><li>When allocating space to store lists of words, ensure you use <tt>.align 2</tt> to align the space to a word boundary.</li>
+<li>Ensure that all data storage is placed in <tt>.data</tt>, and all code is placed in <tt>.text</tt></li>
+<li>Ensure that you only submit the functions in the spec above, and do not include test.s or a <tt>main</tt> function</li>
+</ul>
+<h2>Resources</h2>
+<ul>
+  <li> Slides used for in-class introduction of the lab (<a href="Lab_Tables_Class_pres.pptx">.pptx</a>) (<a href="Lab_Tables_Class_pres.pdf">.pdf</a>)</li>
+  <li> Slides used for in-lab introduction of the lab (<a href="Lab_Tables_Lab_pres_pub.pdf">.pdf</a>)</li>
+</ul>
+
+<h2>Marking Guide</h2>
+<p>
+Assignments too short to be adequately judged for code quality will be given a zero. 
+</p>
+<ul>
+<li>20% For code cleanliness, readability, and comments</li>
+<li>30% for correct implementation of <tt>countAccess</tt></li>
+<li>25% for correct implementation of <tt>readHex</tt></li>
+<li>25% for correct implementation of <tt>printHex</tt></li>
+<li> Here is the <a href="MarkSheet.txt">mark sheet</a> used for grading</li>
+</ul>
+<h2>Submission</h2>
+<p>
+There is a single file to be submitted for this lab. The file name should be <tt>lab2.s</tt> and it should contain only the code for the functions specified above. Make sure to not include a main function in your solution. Use the link provided in the course page for submission.
+</p>

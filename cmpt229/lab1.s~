@@ -1,0 +1,22 @@
+main:
+	li $v0 5   #read
+	syscall
+
+	addi $a0 $v0 0 #add to a0
+
+	srl $t0 $a0 24 #shift
+	
+	andi $t1 $a0 0xFF0000 #mask then shift
+	srl $t1 $t1 8
+	
+	andi $t2 $a0 0x00FF00 #mask then shift
+	sll $t2 $t2 8
+
+	sll $t3 $a0 24 #shift
+	
+	add $a0 $t0 $t1 #add values together
+	add $a0 $a0 $t2
+	add $a0 $a0 $t3
+	
+	li $v0 1 #print
+	syscall

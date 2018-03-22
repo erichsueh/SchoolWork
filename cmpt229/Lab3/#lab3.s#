@@ -1,0 +1,13 @@
+.data
+
+.align 2
+cache:		.space 256
+associate:	.space 4
+	
+.text
+startCache:
+	//store cashe associativity
+	jr $ra
+
+getLRU:
+	

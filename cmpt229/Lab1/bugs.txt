@@ -1,0 +1,9 @@
+The two errors in the program were the fact that we were loading a word instead of a byte for the line "lw $a1 Old". 
+Since Old is just 1 single byte, we need to use lb instead of lw.
+Hence, that line becomes "lb $a1 Old"
+
+The second error is in the loop, where if the string we looked at wasn't a space nor a zero, we would incriment $a0 by 4.
+"addi $a0 $a0 4"
+this line, since we need to go through the string one byte at a time, we would be required to incriment $a0 by 1 instead of 4.
+Therefore, the line becomes "addi $a0 $a0 1".
+Those were the only two errors. 

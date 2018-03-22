@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+	<title>229 Lab - MIPS-to-ARM binary translation</title>
+</head>
+<body>
+<h1>MIPS-to-ARM binary translation</h1>
+<h2>Information</h2>
+<h3>The ARM(Advanced RISC Machines) Instruction Set</h3>
+<p>
+The ARM instruction set varies in quite a few ways from the MIPS instruction set, due to optimizations it has made to allow for fewer control-flow changes and pipeline flushes. ARM has only 15 registers visible at any time, numbered <tt>R0</tt> through <tt>R14</tt>. Of these, <tt>R13</tt> is the <b>Stack Pointer</b>, equivalent to MIPS' <tt>$sp</tt>, and <tt>R14</tt> is the <b>Link Register</b>, equivalent to MIPS' return address (<tt>ra</tt>) register. Additionally, every ARM instruction begins with 4 bits that act as a condition code, determining whether or not that instruction should execute. A typical ARM instruction looks something like this:
+</p>
+<h3>Data-Processing Immediate Format</h3>
+<img src="DataProcImm.png">
+<p> This is an arithmetic-and-logic instruction, capable of adding, subtracting, XORing, <i> etc</i>, an immediate value. However, ARM builds in a few facilities for more complex operations in a single instruction.
+</p>
+<h4>Condition (bits 31-28)</h4>
+<p>The Condition field allows the instruction to be executed conditionally. The purpose is to obviate the need for a branch, which introduces many cycles of delay, when simply conditionally executing the following instruction introduces no significant slowdown. This capacity is enabled by the Status register, discussed further below.
+</p>
+<h4>Immediate (bit 25)</h4>
+<p>The Immediate bit specifies whether the operands are two registers or a register and an immediate value. A 1 specifies an immediate value, while a 0 specifies an additional register.</p>
+<h4>OpCode (bits 24-21)</h4>
+<p>The OpCode specifies the type of operation to perform on the two operands, such as addition, subtraction, exclusive or, etc.</p>
+<h4>Status (bit 20)</h4>
+<p>The status bit determines whether the outcome of this instruction alters the Status register (used for conditionals). This too will be covered in more detail below.</p>
+<h4>Rn (bits 19-16)</h4>
+<p>The content of the register specified by <tt>Rn</tt> is used as the first operand for the ARM instruction.</p>
+<h4>Rd (bits 15-12)</h4>
+<p>The output of the instruction is stored into the register specified by <tt>Rd</tt>.</p>
+<h4>Rotate (bits 11-8)</h4>
+<p>The instruction uses a 32-bit immediate value. To obtain this 32-bit value, the rotate field is first multiplied by 2 and then used to rotate the immediate value right over 32 bits, with wraparound. This means that only some 32-bit values can be used as an immediate value in a single instruction. An advantage of this method of specifying the 32-bit immediate value is that higher powers of two can be represented easily.</p>
+<h4>Immediate (bits 7-0)</h4>
+<p>The immediate is an unsigned 8-bit value that is rotated by the rotate field over 32 bits with wraparound, then used as the 32-bit second operand in the operation specified by the instruction.</p>
+<h3>Data-Processing Register Format</h3>
+<img src="DataProcReg.png">
+<p>This instruction format defines ARM data-processing instructions using 2 registers as operands, rather than 1 register and an immediate value. The immediate bit (bit 25) is now set to <tt>0</tt> to indicate the format change, and bits <tt>11-0</tt> now hold the register for operand 2 and a Shift field.
+<h4>Rm (bits 3-0)</h4>
+<p> The content of the register specified by <tt>Rm</tt> is used as the second operand for the instruction, after a shift (specified below) has been performed on it.</p>
+<h4>Shift (bits 11-4)</h4>
+<img src="shifts.png">
+<p>
+ These bits specify a shift to be performed on the register <tt>Rm</tt> prior to the operation.
+Bit 4 being set to 0 specifies that the shift amount is in bits 7-11. Bit 4 being set to 1 specifies that the shift amount is in (only) the lowest byte of the contents of <tt>Rs</tt>.
+Bits 5-6 specify the shift type as shown in the Shift Types table.
+Rotate right performs a rightward shift in which bits that "fall off" the register are  placed entering the opposite side. As a special case, specifying <tt>Rotate Right 0</tt> in the shift field shifts <tt>Rm</tt> rightwards 1, and places the Carry flag from the status register into bit 31.</p>
+
+<h3>Branch Format</h3>
+<img src="Branch.png">
+<p>ARM and MIPS share many similarities in their branching functionality. 
+Both shift the provided offset left 2 and sign-extend, and must take into account the automatic incrementing of the PC. However, ARM processors prefetch 2 instructions in advance, and therefore the <tt>PC</tt> is set to the address of the branch instruction + 8 when the branch is executed. Additionally, conditional branches require a previously executed instruction to set the condition field. Thus, conditional branches that require only a single instruction in MIPS will require two instructions in ARM. Additionally the link bit, <tt>L</tt>, determines whether the address of the next instruction should be stored into the link register (<tt>R14</tt>).</p>
+
+<h3>Branch Exchange Format</h3>
+<img src="BranchExchange.png">
+<p>ARM's equivalent to <tt>jr</tt> (Jump Register) is <tt>BX</tt>, or Branch Exchange. Despite the different name, it is for our purposes identical to Jump Register, placing the contents of the specified register into the PC.</p>
+<h3>The CPSR (Current Program Status Register)</h3>
+<img src="statusReg.png">
+<p>The CPSR, or status register, controls all conditional execution on the ARM instruction set, as well as various modes of the CPU. The CPSR controls the mode of the CPU (kernel/user), interrupts, and is extensible for future functionality. The portion of the CPSR pertinent to us are the uppermost 4 bits, collectively known as the Condition Code flags.</p>
+<p>Any data processing instruction can update the Condition Code flags, and chooses whether or not to do so based on the Status Bit.</p>
+<h5>N Flag</h5>
+<p>Useful for checking a negative result. Equal to bit <tt>31</tt> of the result of the operation that last set it.</p>
+<h5>V Flag</h5>
+<p>Indicates signed overflow during the operation that set it. Meaningless for unsigned numbers, or other data.</p>
+<h5>Z Flag</h5>
+<p>If set, this flag indicates that the result of the instruction that last set flags was equal to 0.</p>
+<h5>C Flag</h5>
+<p>The C (Carry) flag is set if the result of an addition is greater than or equal to 2<sup>32</sup>, or if the result of a substraction is positive. It is also altered as a side effect of some shifts.</p>
+<h4>Conditions</h4>
+<p>Every instruction has a <tt>conditions</tt> field at the beginning, and these are based on the Condition Code Flags discussed above. We will only be needing a subset of the condition codes, shown below.
+<table border=1><tr>
+<td><b>Code</b></td><td><b>Flag Check</b></td><td><b>Meaning</b></td>
+</tr><tr>
+<td><tt>1110</tt></td><td>No check</td><td>Always Execute</td>
+</tr><tr>
+<td><tt>0000</tt></td><td>Z Set</td><td>Equals (As evaluated with CMP, below)</td>
+</tr><tr>
+<td><tt>1010</tt></td><td>N equals V</td><td>Greater Than or Equal to (As evaluated with CMP)</td>
+</tr><tr>
+<td><tt>1100</tt></td><td>Z clear AND (N equals V)</td><td>Greater Than (As evaluated with CMP)</td>
+</tr></table>
+<h3>The Operations Themselves</h3>
+<p>The ARM instruction set has a wide variety of instructions, of which we will be covering a small subset. The instructions that we will be needing are listed below.</p>
+<table border=1><tr>
+<td><b>Instruction</b></td><td><b>Opcode</b></td><td><b>Effect</b></td>
+</tr><tr>
+<td>AND</td><td><tt>0000</tt></td><td>operand1 AND operand2</td>
+</tr><tr>
+<td>OR</td><td><tt>1100</tt></td><td>operand1 OR operand2</td>
+</tr><tr>
+<td>ADD</td><td><tt>0100</tt></td><td>operand1 + operand2</td>
+</tr><tr>
+<td>SUB</td><td><tt>0010</tt></td><td>operand1 - operand2</td>
+</tr><tr>
+<td>MOV</td><td><tt>1101</tt></td><td>operand2</td>
+</tr><tr>
+<td>CMP</td><td><tt>1010</tt></td><td>operand1 - operand2, result not saved. (flags only)</td>
+
+</table>
+
+<p>In this assignment you are asked to perform the binary translation of a program from MIPS binary to ARM binary. When translating branches, it is important to recognise that the ARM code may not be the same length as the MIPS code. The additional instruction needed to set the conditional field for conditional branches will result in different lengths. </p>
+
+<p>There are many possible solutions for your binary translator to keep track of the different offsets required for branching and jumping instructions. Given that it may be a complex task, we are suggesting a possible solution --- feel free to implement a different solution as long as it generates correct binary code. In the proposed solution, upon encountering a MIPS branch or jump, the binary translator calculates the absolute target address, and stores it in a branch table. Additionally, as each MIPS instruction is translated into ARM, a separate table tracks the correlation from MIPS address to ARM address. Then, once all ARM instructions have been generated, another loop is done over the branch target table. In the event that a target is encountered, the ARM address of both the branch and target are looked up, and the offset is calculated and stored into the branch.</p>
+
+<p>In the graphical example below, the MIPS binary is assumed to be stored in an array beginning at <tt>0x0010 0100</tt>, the MIPS-to-ARM table is an array beginning at <tt>0x0010 0200</tt>, the Branch Table begins at <tt>0x0010 0300</tt>, and the ARM instructions are placed starting at <tt>0x0010 0400</tt>. Corresponding array entries in the MIPS Instructions, MIPS-to-ARM table, and Branch table can all be accessed using offsets from table bases.  The algorithm requires two passes, one over the instructions, and one over the Branch Table. The MIPS instructions, the MIPS-to-ARM table, and the Branch Table have corresponding elements at the same offsets, making it easy to find related data.</p>
+
+<p>For instance, during the first pass in the example the value <tt>0x0010 0414</tt> is entered at the entry with offset <tt>0x0c</tt> in the MIPS-to-ARM Table to indicate that the ARM branch corresponding to the MIPS instruction at offset <tt>0x0c</tt> from <tt>0x0100 0100</tt> appears in address <tt>0x0010 0414</tt> in the ARM Instructions. The first pass also enters <tt>0x0010 020c</tt> at the entry with offset <tt>0x0c</tt> in the Branch Table to indicate the target ARM address through indirection via the MIPS-to-ARM lookup table at offset <tt>0x0c</tt>. Meanwhile, the branch instruction is translated to two ARM instructions which are at addresses <tt>0x0010 0410</tt> and <tt>0x0010 0414</tt>. Even though, in the example shown, it appears that the Branch Table could store directly the address of the target ARM instruction to avoid one indirection through the MIPS-to-ARM Table, in general the indirection is necessary because in the case of a forward branch, the ARM address of the target instruction is not known when the binary translator creates the Branch Table entry for the branch.</p> 
+
+<p>The second pass traverses the Branch Table. If the entry is zero, this means that the MIPS instruction was not a branch and therefore there is nothing to do. For a non-zero entry, two accesses to the MIPS-to-ARM Table are required to compute the difference between the branch instruction address and the target instruction address in the ARM code. The ARM address of the branch instruction is found at the same offset as the Branch Table entry. The target instruction address is found at the address that is stored in the Branch Table entry. To obtain the actual displacement that appears in the branch, it is necessary to subtract 8 (the PC offset).</p>
+
+<img src="branchTables.gif">
+<p>The animation above illustrates the operation of an algorithm that correctly translate MIPS to ARM branches.  The algorithm shown works as follows:
+</p>
+<ul>
+<li><b>Pass 1: (Over MIPS Instructions)</b>
+	<ul>
+	<li>Translate the MIPS instruction into ARM. (Except branch offsets)</li>
+	<li>Place the memory location of the new ARM instruction into the MIPS-to-ARM Table</li>
+	<li>If the encountered instruction is a branch, calculate the absolute address of the MIPS target, and place it into the Branch Table</li>
+	</ul></li>
+<li><b>Pass 2: (Over Branch Table)</b>
+	<ul>
+	<li>If 0, skip to next element</li>
+	<li>If nonzero:
+<ul><li> find target ARM address, and source ARM address, and calculate branch offset</li>
+	<li>Place the offset into the ARM branch instruction (4 bytes below the address pointed to, which is the <tt>CMP</tt> instruction)</li></ul></li>
+	</ul></li>
+	</ul>
+<p>Many variants on this algorithm are also possible. Feel free to experiment with your own method of branch translation.</p>
+
+<!-- <h3>The SBRK Syscall</h3>
+<p>The <tt>SBRK</tt> syscall allows you to allocate memory at runtime, by setting <tt>$a0</tt> to the desired number of bytes, and <tt>$v0 = 9</tt>. This allows you to allocate space as needed instead of pre-allocating vast spans of memory when a small amount would do. The address of the newly allocated memory is returned in <tt>$v0</tt>.
+--> 
+
+<h2>Assignment</h2>
+<p>
+Your assignment is to implement a binary translator from MIPS to ARM for a subset of MIPS assembly instructions. This subset is Turing-complete, consisting of arithmetic, logical, and conditional operators such that anything could, theoretically, be computed with this subset.
+</p>
+<h3>MIPS Instructions to Translate</h3>
+<p>The following are all of the MIPS instructions that you will need to handle in your binary translator. For many of them, additional constraints will be put on them to ensure simple transition to ARM. In the encoding, <tt>s</tt> specifies a source register, <tt>t</tt> a target register, <tt>d</tt> a destination register, <tt>i</tt> an immediate value, and <tt>h</tt> a shift amount.</p>
+<table border=1><tr>
+<td><b>Instruction</b></td><td><b>Encoding</b></td>
+</tr><tr>
+<td><tt>ANDI&nbsp;&nbsp;&nbsp;&nbsp;$t, $s, imm</tt></td><td><tt>0011 00ss ssst tttt iiii iiii iiii iiii</tt></td>
+</tr><tr>
+<td><tt>AND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$d, $s, $t</tt></td><td><tt>0000 00ss ssst tttt dddd d000 0010 0100</tt></td>
+</tr><tr>
+<td><tt>ORI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$t, $s, imm</tt></td><td><tt>0011 01ss ssst tttt iiii iiii iiii iiii</tt></td>
+</tr><tr>
+<td><tt>OR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$d, $s, $t</tt></td><td><tt>0000 00ss ssst tttt dddd d000 0010 0101</tt></td>
+</tr><tr>
+<td><tt>ADDI&nbsp;&nbsp;&nbsp;&nbsp;$t, $s, imm</tt></td><td><tt>0010 00ss ssst tttt iiii iiii iiii iiii</tt></td>
+</tr><tr>
+<td><tt>ADD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$d, $s, $t</tt></td><td><tt>0000 00ss ssst tttt dddd d000 0010 0000</tt></td>
+</tr><tr>
+<td><tt>SUB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$d, $s, $t</tt></td><td><tt>0000 00ss ssst tttt dddd d000 0010 0010</tt></td>
+</tr><tr>
+<td><tt>BEQ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$s, $t, offset</tt></td><td><tt>0001 00ss ssst tttt iiii iiii iiii iiii</tt></td>
+</tr><tr>
+<td><tt>BGEZ&nbsp;&nbsp;&nbsp;&nbsp;$s, offset</tt></td><td><tt>0000 01ss sss0 0001 iiii iiii iiii iiii</tt></td>
+</tr><tr>
+<td><tt>SRA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$d, $t, h</tt></td><td><tt>0000 0000 000t tttt dddd dhhh hh00 0011</tt></td>
+</tr><tr>
+<td><tt>SRL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$d, $t, h</tt></td><td><tt>0000 0000 000t tttt dddd dhhh hh00 0010</tt></td>
+</tr><tr>
+<td><tt>SLL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$d, $t, h</tt></td><td><tt>0000 0000 000t tttt dddd dhhh hh00 0000</tt></td>
+</tr><tr>
+<td><tt>SRLV&nbsp;&nbsp;&nbsp;&nbsp;$d, $t, $s</tt></td><td><tt>0000 00ss ssst tttt dddd d000 0000 0110</tt></td>
+</tr><tr>
+<td><tt>SLLV&nbsp;&nbsp;&nbsp;&nbsp;$d, $t, $s</tt></td><td><tt>0000 00ss ssst tttt dddd d000 0000 0100</tt></td>
+</tr><tr>
+<td><tt>JR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$s</tt></td><td><tt>0000 00ss sss0 0000 0000 0000 0000 1000</tt></td>
+</tr><tr>
+</table>
+<p>Issues arise due to the difference in the way that ARM and MIPS handle immediate values. While MIPS uses sign-extended 16-bit values, ARM uses non sign-extended and rotated 8 bit values.
+To prevent this difference in format from becoming an issue, immediates that appear in the MIPS code are guaranteed to be non-negative values that fit inside 8 bits given some valid rotation. A special case occurs for the MIPS instruction <tt>ADDI</tt>, where immediate values may also be the 2's-complement negation of any of the above mentioned values.</p>
+<p>A single conditional branch in MIPS may have to be translated into 2 instructions in ARM. The first instruction will set the conditions and the second will perform the branch based on the conditions. <b>Additional constraint:</b> for consistency for marking, only <tt>CMP</tt> should be used to generate conditions for branches (not its arithmetic counterpart, <tt>SUB</tt>). </p>
+<h3>Register Translation</h3>
+<p>The ARM architecture exposes only 16 registers at a time to its instructions. A fully featured binary translator would need to recompute register allocation, which is beyond the scope of this assignment. Therefore, the translator will assume that only the MIPS registers below appear in a valid MIPS program. However, an invalid MIPS program that uses registers not listed in the table below may be used for testing the translator. Any registers not included in the table are not to be translated. If they are encountered while attempting translation, the translator should generate an instruction corresponding to <tt>MOV R0, R0</tt>. This instruction has no effect, and is the preferred way of expressing a <tt>nop</tt>(no-operation) on the ARM architecture.</p>
+
+<table border=1><tr>
+<td><b>MIPS Register</b></td><td><b>ARM Register</b></td>
+</tr><tr>
+<td><tt>Reserved for Translator</tt></td><td><tt>R0</tt></td>
+</tr><tr>
+<td><tt>$at ($1)</tt></td><td><tt>R1</tt></td>
+</tr><tr>
+<td><tt>$v0 ($2)</tt></td><td><tt>R2</tt></td>
+</tr><tr>
+<td><tt>$v1 ($3)</tt></td><td><tt>R3</tt></td>
+</tr><tr>
+<td><tt>$a0 ($4)</tt></td><td><tt>R4</tt></td>
+</tr><tr>
+<td><tt>$a1 ($5)</tt></td><td><tt>R5</tt></td>
+</tr><tr>
+<td><tt>$a2 ($6)</tt></td><td><tt>R6</tt></td>
+</tr><tr>
+<td><tt>$a3 ($7)</tt></td><td><tt>R7</tt></td>
+</tr><tr>
+<td><tt>$t0 ($8)</tt></td><td><tt>R8</tt></td>
+</tr><tr>
+<td><tt>$t1 ($9)</tt></td><td><tt>R9</tt></td>
+</tr><tr>
+<td><tt>$t2 ($10)</tt></td><td><tt>R10</tt></td>
+</tr><tr>
+<td><tt>$t3 ($11)</tt></td><td><tt>R11</tt></td>
+</tr><tr>
+<td><tt>$t4 ($12)</tt></td><td><tt>R12</tt></td>
+</tr><tr>
+<td><tt>$sp ($29)</tt></td><td><tt>R13</tt></td>
+</tr><tr>
+<td><tt>$ra ($31)</tt></td><td><tt>R14</tt></td>
+</tr></table>
+<h3>Specification</h3>
+<p>You are required to implement the following function:
+  <ul>
+    <li><tt>MIPStoARM</tt>:
+      <ul>
+	<li><b>Arguments:</b>
+	  <ul>
+	    <li> <tt>$a0</tt> = pointer to memory containing a MIPS function. The function ends when the sentinel word <tt>0xFFFFFFFF</tt> is encountered.
+	    </li>
+	  </ul>
+	</li>
+	<li><b>Return Values:</b>
+	  <ul>
+	    <li> <tt>$v0</tt> = The number of ARM instructions generated.
+
+	    <li> <tt>$v1</tt> - A pointer to the first instruction of the ARM program that is stored in a memory space that you are responsible to allocate (either in pre-allocated space, or allocated at runtime using the <tt>sbrk</tt> syscall)
+	    </li>
+	  </ul>
+      </ul>
+  </ul>
+<h4>Notes:</h4>
+<ul><li>Only conditional branches may need two ARM instructions per MIPS instruction</li>
+<li>ARM branches offset differently than MIPS branches (see above). Ensure that the translator correctly accounts for the difference in offset.</li>
+<li>While invalid instructions or registers may appear in the MIPS code, only immediate values that meet the standard above will be used</li>
+<li>Translation consistent with the specification above when invalid registers appear in the MIPS code will be tested for all instructions.</li>
+<li>The MIPS code provided to the translator is guaranteed to fit within 1Kb of storage</li>
+</ul>
+<h3>Resources</h3>
+<p>To obtain testing data, you can write short MIPS programs using the subset of instructions provided, and convert them into binay files using the following commands:
+</p>
+<ul><li>bash&gt; <tt>spim -notrap -bare</tt></li>
+<li>(spim) <tt>load "YOUR_MIPS_FILE"</tt></li>
+<li>(spim) <tt>dumpnative "YOUR_DESIRED_BINARY_FILE"</tt></li>
+<li>(spim) <tt>quit</tt></li>
+</ul>
+<p>You are also given this file <a href="test.s">test.s</a> to load MIPS binary from a file and see what ARM instructions your code is generating. The program in <tt>test.s</tt> takes the name of the file containing the test to load as an argument. Thus, it can be run using <tt>spim -file test.s MIPS_BINARY_FILE</tt>. The program  in <tt>test.s</tt> prints the instructions using syntax similar, but not identical, to ARM assembly. It prints only values that meet the above spec, producing question marks where no valid interpretation is possible. You are responsible for creating test cases to ensure compliance with the assignment specification. Ensure that you don't submit with test.s attached, or with a <tt>main</tt> subroutine.</p>
+<h2>Resources</h2>
+  <p> Slides used for the introduction to the lab (<a href="Lab_ARM_Class_pres.pptx">.pptx</a>)  (<a href="Lab_ARM_Class_pres.pdf">.pdf</a>) and in-lab presentation (<a href="Lab_ARM_Lab_pres.pdf">.pdf</a>)</p>
+  <p> Some test cases are available in this <a href="TestCases">directory</a>.</p>
+
+<h2>Marking Guide</h2>
+<p>
+Assignments too short to be adequately judged for code quality will be given a zero. Register translation is vital for all instructions. Therefore is is difficult for a binary translator that does not do correct register translation to pass ANY of the grading test cases. Please, ensure proper register translation according to the table above.
+</p>
+<ul>
+<li>10% For code cleanliness, readability, and comments</li>
+<li>5% per instruction correctly implemented, for a total of 75%</li>
+<li> 15% for correctly translating (in their entirety) complete functions, using most, if not all, available instructions.</li>
+<li> Here is the <a href="MarkSheet.txt">mark sheet</a> used for grading</li>
+</ul>
+<h2>Submission</h2>
+<p>There is a single file to be submitted for this lab. The file name should be <tt>lab5.s</tt> and it should contain only the code for the functions specified above. Make sure to not include a main function in your solution. Use the link provided in the course page for submission.</p>
+
