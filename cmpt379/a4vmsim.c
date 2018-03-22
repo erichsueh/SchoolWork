@@ -1,0 +1,312 @@
+/*
+0;136;0cEric Hsueh
+Student ID: 1384955
+This is my a4vm program
+*/
+#include <cmath>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
+#include <string>
+#include <stdlib.h>
+#include <sys/time.h>
+#include <sys/resource.h>
+#include <stdarg.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <time.h>
+#include <sys/times.h>
+#include <poll.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <signal.h>
+#include <vector>
+#include <set>
+#include <map>
+#include <bitset>
+#include <deque>
+#include <algorithm>
+
+#define MAXLINE 4096
+#define BUFFSIZE 4096
+
+#include<iostream>
+using namespace std;
+int main(int argc, char * argv[])
+{
+  if (argc == 4)
+    {
+      int numframes = ceil(double(atoi(argv[2])/atoi(argv[1])));
+      printf("frames %d",numframes);
+      unsigned int buf;
+      int leftmost = 32 - (log(atoi(argv[1]))/log(2));
+      int shift = 32 - leftmost;
+      printf("leftmost bits = %d, shift = %d",leftmost, shift);
+      int accum = 0;
+      int write = 0;
+      int memref = 0;
+      int pagefault = 0;
+      int flush = 0;
+      /*http://www.geeksforgeeks.org/how-to-measure-time-taken-by-a-program-in-c/*/
+      /*clock code taken from here*/
+      clock_t start, end;
+      double cpu_time_used;
+      set<unsigned int> pageRef;
+      set<unsigned int> flusher;
+      /*printf("%s\n",argv[3]);*/
+      
+      /*NONE STRATEGY IMPLEMENTED HERE*/
+      start = clock();
+      if(strcmp(argv[3],"none") ==0)
+	{
+	  printf("none\n");
+	  while(read(STDIN_FILENO, &buf, sizeof(buf)))
+	    {
+	      unsigned int val = buf & 63;
+	      unsigned int opcode = (buf >> 6) & 3;
+	      unsigned int page = (buf >> shift);
+	      //cout << page;
+	      memref = memref +1;
+	      if (pageRef.find(page) == pageRef.end())
+		{
+		  pageRef.insert(page);
+		  pagefault = pagefault+1;
+		}
+	      /*unsigned int val = buf & 63;
+		unsigned int opcode = (buf >> 6) & 3;*/
+	      if (opcode == 0)
+		{
+		  /*printf("i'm adding to accum\n");*/
+		  accum = accum + val;
+		}
+	      else if (opcode == 1)
+		{
+		  /*printf("i'm subtracting from accum\n");*/
+		  accum = accum - val;
+		}
+	      else if (opcode == 2)
+		{
+		  write = write + 1;
+		}
+	      else if (opcode == 3)
+		{
+		  /*read here */
+		}
+	    }
+	}
+      
+      /*MRAND STRATEGY IMPLEMENTED HERE*/
+      else if(strcmp(argv[3],"mrand") ==0)
+	{
+	  deque<unsigned int> ref;
+	  //boost::container::flat_set<unsigned int> mrand;
+	  /*divide argv[1] by argv[2] to get frames*/
+	  /*set hashtable to framesize*/
+	  //int refcounter = 0;
+	  printf("mrand\n");
+	  while(read(STDIN_FILENO, &buf, sizeof(buf)))
+	    {
+	      unsigned int val = buf & 63;
+	      unsigned int opcode = (buf >> 6) & 3;
+	      unsigned int page = (buf >> shift);
+	      //cout << page;
+	      memref = memref +1;
+	      
+	      if (find(ref.begin(),ref.end(),page) == ref.end())
+		{
+		  pagefault = pagefault +1;
+		  //printf("numframes %d",numframes);
+		  if (ref.size() < numframes)
+		    {
+		      ref.push_back(page);
+		    }
+		  else
+		    {
+		      int randNum = rand()%(numframes-3+1) + 3;
+		      unsigned int temp = ref[randNum];
+		      //cout << temp;
+		      if (flusher.find(temp) != flusher.end())
+			{
+			  flusher.erase(temp);
+			  flush = flush + 1;
+			}
+		      ref.erase(remove(ref.begin(),ref.end(),temp));
+		      ref.push_back(page);
+		    }
+		}
+	      else
+		{
+		  ref.erase(remove(ref.begin(),ref.end(),page));
+		  ref.push_back(page);
+		}
+	  
+	      if (opcode == 0)
+		{
+		  /*printf("i'm adding to accum\n");*/
+		  accum = accum + val;
+		}
+	      else if (opcode == 1)
+		{
+		  /*printf("i'm subtracting from accum\n");*/
+		  accum = accum - val;
+		}
+	      else if (opcode == 2)
+		{
+		  write = write + 1;
+		  flusher.insert(page);
+		}
+	      else if (opcode == 3)
+		{
+		  /*read here */
+		}
+	    }
+	}
+
+      /*LRU STRATEGY IMPLEMENTED HERE*/
+      /*https://stackoverflow.com/questions/8930417/how-to-check-find-if-an-item-is-in-a-deque*/
+      /*finding stuff in double eneded quque taken from stack*/
+      else if(strcmp(argv[3],"lru")==0)
+	{
+	  deque <unsigned int> lru;
+	  printf("lru\n");
+	  while(read(STDIN_FILENO, &buf, sizeof(buf)))
+	    {
+	      //bitset<32> x(buf);
+	      //cout << x <<"\n";
+	      unsigned int val = buf & 63;
+	      unsigned int opcode = (buf >> 6) & 3;
+	      unsigned int page = (buf >> shift);
+	      //cout << page<<"\n";
+	      memref = memref +1;
+	      if (find(lru.begin(),lru.end(),page) == lru.end())
+		{
+		  pagefault = pagefault +1;
+		  //printf("numframes %d",numframes);
+		  if (lru.size() < numframes)
+		    {
+		      lru.push_back(page);
+		    }
+		  else
+		    {
+		      unsigned int temp = lru.front();
+		      if (flusher.find(temp) != flusher.end())
+			{
+			  flusher.erase(temp);
+			  flush = flush + 1;
+			}
+		      lru.pop_front();
+		      lru.push_back(page);
+		    }
+		}
+	      else
+		{
+		  lru.erase(remove(lru.begin(),lru.end(),page));
+		  lru.push_back(page);
+		}
+	      /*unsigned int val = buf & 63;
+                unsigned int opcode = (buf >> 6) & 3;*/
+	      if (opcode == 0)
+		{
+		  /*printf("i'm adding to accum\n");*/
+		  accum = accum + val;
+		}
+	      else if (opcode == 1)
+		{
+		  /*printf("i'm subtracting from accum\n");*/
+		  accum = accum - val;
+		}
+	      else if (opcode == 2)
+		{
+		  write = write + 1;
+		  flusher.insert(page);
+		}
+	      else if (opcode == 3)
+		{
+		  /*read here */
+		}
+	    }
+	}
+
+      /*SEC STRATEGY IMPLEMENTED HERE*/
+      else if(strcmp(argv[3],"sec")==0)
+	{
+	  printf("sec\n");
+	  //unsigned int sec[numframes];
+	  deque <unsigned int> sec;
+	  int dirty[numframes];
+	  while(read(STDIN_FILENO, &buf, sizeof(buf)))
+	    {
+	      unsigned int val = buf & 63;
+	      unsigned int opcode = (buf >> 6) & 3;
+	      unsigned int page = (buf >> shift);
+	      //cout << page;
+	      memref = memref +1;
+	      if (find(sec.begin(),sec.end(),page) == sec.end())
+		{
+		  pagefault = pagefault +1;
+		  //printf("numframes %d",numframes);
+		  if (sec.size() < numframes)
+		    {
+		      dirty[sec.size()] =1;
+		      sec.push_back(page);
+		    }
+		  else
+		    {
+		      /*go through the dirty until we find a and replace all that we've seen witha 0 bit*/
+		      /*once we find a dirty, we victumize it and replace*/
+		      unsigned int temp = sec.front();
+		      if (flusher.find(temp) != flusher.end())
+			{
+			  flusher.erase(temp);
+			  flush = flush + 1;
+			}
+		      sec.pop_front();
+		      sec.push_back(page);
+		    }
+		}
+	      else
+		{
+		  /*update dirty bit to make it so that we know next time we see it that it is infact dirty*/
+		  sec.erase(remove(sec.begin(),sec.end(),page));
+		  sec.push_back(page);
+		}
+	      if (opcode == 0)
+		{
+		  /*printf("i'm adding to accum\n");*/
+		  accum = accum + val;
+		}
+	      else if (opcode == 1)
+		{
+		  /*printf("i'm subtracting from accum\n");*/
+		  accum = accum - val;
+		}
+	      else if (opcode == 2)
+		{
+		  write = write + 1;
+		}
+	      else if (opcode == 3)
+		{
+		  /*read here */
+		}
+	    }
+	}
+
+      /*else statement*/
+      else
+	{
+	  printf("unrecognized strategy\n");
+	}
+
+      /*print statements at the end*/
+      end = clock();
+      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+      printf("[a4vmsim] %d references processed using '%s' in %lf sec.\n",memref,argv[3],cpu_time_used);
+      printf("[a4vmsim] page faults= %d, write count = %d, flushes = %d\n",pagefault,write,flush);
+      printf("[a4vmsim] Accumulator = %d\n",accum);
+    }
+}

@@ -1,0 +1,13 @@
+#Eric Hsueh
+#1384955
+#makefile for assignment 1
+
+a1shell: a1shell.c
+	gcc a1shell.c -o a1shell
+
+clean:
+	-rm -f a1shell core
+	-rm -f submit.tar
+
+tar:
+	tar -cvf submit.tar a1shell.c Makefile README.txt ProjectReport.pdf

@@ -1,0 +1,5 @@
+Eric Hsueh
+1384955
+
+My a2rchat program has a few bugs in it so far, but it can communicate with the server and output whatever you type... although the output is very odd.
+This can be fixed by using polling with the client.

@@ -1,0 +1,115 @@
+/*Eric Hsueh
+Student ID: 1384955
+This is my a2chat program
+*/
+
+/* Here are all my include files*/
+
+#include <sys/wait.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <sys/time.h>
+#include <sys/resource.h>
+#include <stdarg.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <time.h>
+#include <sys/times.h>
+#include <poll.h>
+#define MAXLINE 4096
+#define BUFFSIZE 4096
+#define err(mess) { fprintf(stderr,"Error: %s.", mess); exit(1); }
+
+int main(int argc, char * argv[])
+{
+  char buf[MAXLINE];
+  int fd; 
+  /*printf("%i",argc);*/
+  /*THIS IS THE CLIENT PORTION OF THE CODE*/
+  if (3 == argc)
+    {
+      if (strcmp(argv[1],"-c") ==0)
+	{
+	  printf("a2chat_client:");
+	  /*find fifo unlocked with same basename
+	    connect to said fifo
+	    run this loop
+	    at the end of the loop, unlock said fifo
+	    close*/
+	  if ((fd = open("fifo_x",O_WRONLY)) < 0)
+	    {
+	      err("open");
+	    }
+	  while(fgets(buf, MAXLINE, stdin) != NULL)   
+	    {
+	      if ( write(fd, buf, strlen(buf))== -1)
+		{
+		  err("write");
+		}
+	    }
+	  close(fd);
+	}
+    }
+  /*THIS IS THE SERVER PORTION OF THE CODE*/
+  else if (4 == argc)
+    {
+      if (strcmp(argv[1],"-s") ==0)
+	{
+	  /*create fifo's with the base name in a loop to the max #*/
+	  int a,nclient;
+	  char *name,snum[3],final[300];
+	  nclient = atoi(argv[3]);
+	  struct pollfd fds[nclient];
+	  name = argv[2];
+	  /*creating clients here*/
+	  for(a=0; a<nclient ;a= a+1)
+	    {
+	      strcpy(final,name);
+	      sprintf(snum, "%d",a);
+	      strcat(final,snum);
+	      printf("%s \n",final);
+	      mkfifo(final,0666);
+	      if ( (fd = open(final, O_RDWR|O_NONBLOCK)) < 0)
+		{
+		  err("open");
+		}
+	      fds[a].fd = fd;
+	      fds[a].events = POLLIN;
+	    }
+	  
+	  printf("Chat server begins [nclient = %s]",argv[3]); 
+	  int ret;
+	  int ret_poll,fd_poll; ssize_t ret_read;
+	  char buff[100];
+	  struct pollfd input[1] = {{fd: 0, events: POLLIN}};
+	  while(1)
+	    {
+	      /*poll here*/
+	      ret_poll = poll(input, 2, 1);
+	      fd_poll = poll(fds, 2, 1);
+	      printf("startpollhere, retpoll = %i fd_poll = %i \n",ret_poll,fd_poll);
+	      /*checking if stdin is exit or not*/
+	      /*if (feof(stdin)==0)
+		{
+		  if(fgets(buf,MAXLINE, stdin)!= NULL)
+		    {
+		      printf("Im %d",strcmp(buf,"exit"));
+		      if (strcmp(buf,"exit\n") ==0)
+			{
+			  printf("EXITING");
+			  exit(0);
+			}
+		    }
+		}*/
+	    }
+	      /*if ( write(STDOUT_FILENO, buf, n) != n)
+		{
+		  exit(1);
+	        }*/
+	}
+    } 
+}
