@@ -1,0 +1,19 @@
+import sqlite3 as lite
+import sys
+
+
+def opensql(database):
+    con = lite.connect(database)
+    cur = con.cursor()
+    return(con,cur)
+
+def main():
+    database = sys.argv[1]
+    l = sys.argv[2]
+    k = sys.argv[3]
+
+    con,cur = opensql(database)
+    con.close()
+    return()
+
+main()

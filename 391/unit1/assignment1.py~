@@ -1,0 +1,14 @@
+#improts
+
+
+def openstuff():
+    #todo
+    return()
+
+
+def main():
+    print("hello")
+    openstuff()
+    return()
+
+main();

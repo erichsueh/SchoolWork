@@ -1,0 +1,9 @@
+#Eric Hsueh
+#1384955
+#makefile for assignment 1
+
+q1: q1.c
+        gcc q1.c -o q1
+
+clean:
+        -rm -f q1 core

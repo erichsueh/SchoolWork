@@ -1,0 +1,5 @@
+bottomleft box = 53.404750,-113.685867
+top right box = 53.714084, -113.320182
+./bin/osmosis --read-pbf alberta-latest.osm.pbf --bounding-box bottom=53.404750 left=-113.685867 top=53.714084 right=-113.320182 --write-xml edmonton.osm
+
+^do that command in the osmosis folder

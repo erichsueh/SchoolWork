@@ -1,0 +1,17 @@
+#include <q.h>
+
+int main(int argc, char * argv[])
+{
+  sqlite3 *db;
+  int rc;
+  sqlite3_stmt *stmt;
+  /*load database*/
+  if (rc = sqlite3_open(argv[1],&db))
+    {
+      fprintf(stderr, "Can't Open database: %s\n", sqlite3_errmsg(db));
+      sqlite3_close(db);
+      return(1);
+    }
+
+  
+}
