@@ -1,0 +1,13 @@
+total 17K
+1.0K -rw-------+ 1 ehsueh ugrad  216 Sep  8 14:30 C:\nppdf32Log\debuglog.txt
+1.5K drwx------+ 2 ehsueh ugrad    3 May  7  2014 Desktop
+1.5K drwx------+ 3 ehsueh ugrad    3 May  7  2014 Documents
+1.5K drwx------+ 3 ehsueh ugrad   17 Sep  8 14:41 Downloads
+1.5K -rw-------+ 1 ehsueh ugrad 3.1K Feb 10  2015 Lab5-1.py
+1.5K drwx------+ 3 ehsueh ugrad    3 Sep  8 14:10 Music
+1.5K drwx------+ 2 ehsueh ugrad    2 May  7  2014 Pictures
+1.5K drwx------+ 2 ehsueh ugrad    2 May  7  2014 Public
+1.5K drwx------+ 2 ehsueh ugrad    2 May  7  2014 Templates
+1.5K drwx------+ 2 ehsueh ugrad    2 May  7  2014 Videos
+1.5K drwx------+ 5 ehsueh ugrad    5 Sep  8 15:00 cmpt201
+1.0K -rw-------+ 1 ehsueh ugrad   73 Sep  8 14:36 hello.c~

@@ -1,0 +1,11 @@
+void memclean(){
+199  int x;
+200
+201  for (x=0;x!=counter2+1;x++)
+202    {
+203      fprintf(stdout,"hue\n");
+204      //x++;
+    }
+fprintf(stdout,"done");
+  return;
+    }

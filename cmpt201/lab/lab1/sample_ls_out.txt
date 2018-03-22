@@ -1,0 +1,12 @@
+C:\nppdf32Log\debuglog.txt
+Desktop
+Documents
+Downloads
+Lab5-1.py
+Music
+Pictures
+Public
+Templates
+Videos
+cmpt201
+hello.c~

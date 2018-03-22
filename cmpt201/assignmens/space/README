@@ -1,0 +1,7 @@
+Eric Hsueh
+1384955
+ehsueh
+A similar yet slightly different than lunar lander
+Improvements were showing gravity, velocity, and angle that you're flying at, as well as colour, and a title page.
+to run the program, type ./space -g (your gravity) -t(your acceleration negative) -f(landscape) and -i (to enable the improvements)
+All of the code was taken from the slides, the man pages, as well as the labs, and the website that was linked for the detection code.

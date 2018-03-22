@@ -1,0 +1,42 @@
+
+int main(int argc, char*argv[])
+{
+  int i;
+  FILE *fp;
+  FILE* executable;
+  i = 1;
+  if (argc==2)
+    {
+      fp = fopen(argv[i],"r");
+      if (fp == NULL)
+	{
+	  printf("Couldn't open file %s\n",argv[i]);
+	}
+      else
+	{
+	  /*if the file is valid, do work*/
+	  fprintf(stdout,"%s started on ",argv[0]);
+
+	  fflush(stdout);
+	  system("date");
+	  executable = popen(exec_name, "w");
+	  if (executable == NULL)
+	    {
+	      fprintf(stderr,"Could not open pipe %s\n",exec_name);
+	    }
+	  imagepro(fp,argv[i],executable);
+	  //fprintf("%d %d %d\n",&fp,&argv[i],&executable);
+	  //fileCheck(fp,argv[i], executable);
+	  fflush(executable);
+	  pclose(executable);
+	  fclose(fp);
+	  return(EXIT_SUCCESS);
+	}
+    }
+  else
+    {
+      fprintf(stdout,"\n");
+      exit(-1);
+    }
+  return(0);
+}

@@ -1,0 +1,17 @@
+Eric Hsueh
+1384955
+ehsueh
+
+My program, reads and input file and then does the commands based on what was called:
+in the Comment lines, it just prints the comment back to stdoutput
+If image, it creates a structure,stores the structure in an object array for later use
+If draw, then it accesses the correct structure and then sends the coordinates to sketchpad for processing
+if print, it accesses the correct structure and prints out the coordinates
+if translate, it adds 10 onto each and every coordinate
+if child, it removes the child and then echo's the rest of the command into the sketchpad
+
+type make in order to compile the program
+and then type ./draw1b ./inputfile.x
+where x can be either 3 or 2 in order to send the contents of the inputfile into the sketchpad
+
+All of the code was taken from the slides, the man pages, as well as the labs

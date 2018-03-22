@@ -1,0 +1,10 @@
+	
+
+int main(void)
+{
+    printf("Hello, world!\n");
+    printf("%6d. The area of a circle whose radius is \t %10.3f  is %lf  \n", ivar,fvar,dvar);
+    return EXIT_SUCCESS;
+}
+
+

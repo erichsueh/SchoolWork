@@ -1,0 +1,26 @@
+name:               Neil Burch
+ONE Card number:    9999999
+Unix id:            burch
+lecture section:    A1
+lab section:        D01
+TA's name:          Your TAName
+
+Does the following (see parse.c comment for more details)
+
+  Read from input file (1st col.)             Convert to this (2nd col.)
+  ==============================              =========================
+  CLEARScreen                                 clearScreen
+  Pause n                                     pause n_r
+  END                                         end
+  DRAWSegment x1 y1 x2 y2                     drawSegment x1_r y1_r x2_r y2_r
+
+Compile by typing make.
+
+Ensure an executable sketchpad.jar in the current directory, and run by
+typing
+
+./parse ./input_file
+
+where input_file is a text file containg valid input for parse.c.
+
+All of the files are based on materials from previous years of 201.
