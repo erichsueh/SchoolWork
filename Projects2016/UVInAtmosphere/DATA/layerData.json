@@ -1,0 +1,228 @@
+{"firstLayer":
+	[
+		{
+			"title" : "Solar Radiation: Origin of UV Light",
+			"titleColor": "#BA0D0D",
+			"buttonType": "",
+			"buttonText": "",
+			"buttonContent": "",
+			"mainText": "What is Ultraviolet (UV) light, and where does it come from? ",
+			"defaultImage": "IMG/ultravioletSun.png",
+			"buttonLink": ""
+		},
+		{
+			"title" : "Solar Radiation: Origin of UV Light",
+			"titleColor": "#BA0D0D",
+			"buttonType": "imageAnswer",
+			"buttonText": "Show Black Body Curve",
+			"buttonContent": "IMG/blackBody.png",
+			"mainText": "A blackbody is a body that emits light at all wavelengths. The sun is an example of such a body. Most of this light, such as Ultraviolet light, is invisible to the human eye. ",
+			"defaultImage": "IMG/ultravioletSun.png",
+			"buttonLink": ""
+		},
+		{
+			"title": "Solar Radiation: Origin of UV Light",
+			"titleColor": "#BA0D0D",
+			"buttonType": "imageAnswer",
+			"buttonText": "Show Spectrum",
+			"buttonContent": "IMG/emSpectrum.png",
+			"mainText": "The smaller the wavelength, the higher the energy. Gamma, X-ray, and Ultraviolet all have more energy than visible light, while Infrared, Microwave, and Radio all have lower energy than visible light. ",
+			"defaultImage": "IMG/uvSpectrum1.png",
+			"buttonLink": ""
+		},
+		{
+			"title": "Solar Radiation: Origin of UV Light",
+			"titleColor": "#BA0D0D",
+			"buttonType": "",
+			"buttonText": "",
+			"buttonContent": "",
+			"mainText": "While Gamma and X-ray have more energy than Ultraviolet, the sun emits more Ultraviolet light than Gamma and X-ray. ",
+			"defaultImage": "IMG/blackBody.png",
+			"buttonLink": ""
+		},
+		{
+			"title": "Solar Radiation: Origin of UV Light",
+			"titleColor": "#BA0D0D",
+			"buttonType": "imageAnswer",
+			"buttonText": "Show Table",
+			"buttonContent": "IMG/uvRangeTable.png",
+			"mainText": "Just like visible light is categorized into colors, where red has a longer wavelength and purple has a shorter wavelength, UV light is also categorized based on wavelength. The three types, from longest to shortest wavelength, are UVA, UVB, and UVC. ",
+			"defaultImage": "IMG/uvSpectrum1.png",
+			"buttonLink": ""
+		},
+		{
+			"title": "Solar Radiation: Origin of UV Light",
+			"titleColor": "#BA0D0D",
+			"buttonType": "",
+			"buttonText": "",
+			"buttonContent": "",
+			"mainText": "What happens to this light? Why aren't we constantly exposed to X-Rays and Gamma rays? Move the photometer down to find out!",
+			"defaultImage": "IMG/uvSpectrum1.png",
+			"buttonLink": ""
+		}
+	],
+"secondLayer":
+	[
+		{
+			"title" : "Missing Light",
+			"titleColor": "#1E1A8A",
+			"buttonType": "imageAnswer",
+			"buttonText": "Show Spectrum",
+			"buttonContent": "IMG/radiationSpectrum.png",
+			"mainText": "Not all of the sun's light reaches the Earth's surface. If all of the light reached the Earth's surface, then harmful rays such as X-rays, Gamma, and UVC would prevent life from forming. ",
+			"defaultImage": "IMG/uvSpectrum1.png",
+			"buttonLink": ""
+		},
+		{
+			"title" : "Missing Light",
+			"titleColor": "#1E1A8A",
+			"buttonType": "",
+			"buttonText": "",
+			"buttonContent": "",
+			"mainText": "The highest energy light (Gamma and X-ray) are completely absorbed in the upper atmosphere. Photons at these wavelengths have enough energy that they cause atoms to lose electrons upon absorption in a process called ionization. Other high energy light, such as UV, is absorbed by oxygen and ozone. Move the photometer down to find out how this happens!",
+			"defaultImage": "IMG/uvSpectrum1.png",
+			"buttonLink": ""
+		}
+	],
+"thirdLayer":
+	[
+		{
+			"title": "The Role of Oxygen",
+			"titleColor": "#1A8A3D",
+			"buttonType": "imageAnswer",
+			"buttonText": "Show Diagram",
+			"buttonContent": "IMG/oxygenBond.png",
+			"mainText": "Oxygen (O<sub>2</sub>) is abundant throughout the atmosphere (~20%). Light with wavelength smaller than 242nm has enough energy to break the bonds between the two oxygen atoms. This means that UVC light with wavelength between 200nm and 242nm is absorbed by oxygen molecules. This energy is then used to break the bonds within the O<sub>2</sub> molecules. ",
+			"defaultImage": "IMG/uvSpectrum2.png",
+			"buttonLink": ""
+		},
+		{
+			"title": "The Role of Oxygen",
+			"titleColor": "#1A8A3D",
+			"buttonType": "",
+			"buttonText": "",
+			"buttonContent": "",
+			"mainText": "Since oxygen is found throughout the atmosphere, absorption of UVC begins in the upper atmosphere and continues throughout the rest of the atmosphere. ",
+			"defaultImage": "IMG/uvSpectrum2.png",
+			"buttonLink": ""
+		},
+		{
+			"title": "The Role of Oxygen",
+			"titleColor": "#1A8A3D",
+			"buttonType": "",
+			"buttonText": "",
+			"buttonContent": "",
+			"mainText": "While abundant, the oxygen doesn't absorb all of the UVC, as light with wavelength longer than 242nm cannot break the bonds between oxygen atoms. So what happens to the UVC that ranges from 242nm to 280nm? Move the photometer down to find out!",
+			"defaultImage": "IMG/uvSpectrum2.png",
+			"buttonLink": ""
+		}
+	],
+"fourthLayer":
+	[
+		{
+			"title": "Ozone and the Ozone Layer",
+			"titleColor": "#9C3474",
+			"buttonType": "overlay",
+			"buttonText": "Show Ozone Layer",
+			"buttonContent": "IMG/ozoneOverlay.png",
+			"mainText": "Ozone (O<sub>3</sub>), which is composed of three oxygen atoms, has weaker bonds than molecular oxygen, O<sub>2</sub>. These weaker bonds require less energy to break, and so, can be broken by light with wavelength smaller than 320nm. Most of the ozone is concentrated in a region known as the ozone layer. About 90% of the planet's ozone is found in the stratosphere. Click on the image bellow to open an interactive applet to see how light interacts with ozone. ",
+			"defaultImage": "IMG/Figure2_9.png",
+			"buttonLink": "../ozone/ozone.html"
+		},
+		{
+			"title": "Ozone and the Ozone Layer",
+			"titleColor": "#9C3474",
+			"buttonType": "overlay",
+			"buttonText": "Show Absorption",
+			"buttonContent": "IMG/penetration1.png",
+			"mainText": "Since all UVB and UVC have wavelengths smaller than 320nm, the ozone molecules in the atmosphere absorbs most of the UVB, and all remaining UVC. ",
+			"defaultImage": "IMG/uvSpectrum3.png",
+			"buttonLink": ""
+		},
+		{
+			"title": "Ozone and the Ozone Layer",
+			"titleColor": "#9C3474",
+			"buttonType": "textAnswer",
+			"buttonText": "Show Answer",
+			"buttonContent": "Ozone molecules are created near the Earth's surface through human activity, as well as naturally through high-energy electrical discharges, such as lightning. </br> Energy + 3 O<sub>2 (g)</sub> &#8594 2 O<sub>3 (g)</sub>",
+			"mainText": "If UV light breaks ozone molecules, then how are they created? Why isn't all the ozone gone from the atmosphere?",
+			"defaultImage": "IMG/uvSpectrum3.png",
+			"buttonLink": ""
+		},
+		{
+			"title": "Ozone and the Ozone Layer",
+			"titleColor": "#9C3474",
+			"buttonType": "imageAnswer",
+			"buttonText": "Click to Show Chapman Cycle",
+			"buttonContent": "IMG/chapman.png",
+			"mainText": "Ozone is constantly created at the same rate as it is destroyed by UV light through natural processes such as the Chapman cycle. What if something were to disturb this natural balance and deplete ozone faster than it is created? Worldwide measurements in the last 20 years have indicated a decrease in ozone concentrations, especially over the poles. This decrease of ozone cannot be correlated to changes in the intensity of solar radiation or other natural events.  Could there be a chemical produced by humans that harms the ozone layer? ",
+			"defaultImage": "IMG/uvSpectrum3.png",
+			"buttonLink": ""
+		},
+		{
+			"title": "Ozone and the Ozone Layer",
+			"titleColor": "#9C3474",
+			"buttonType": "",
+			"buttonText": "",
+			"buttonContent": "",
+			"mainText": "One such culprit is a group of compounds known as chlorofluorocarbons, or CFCs for short. These gases have been used since the 1930’s as refrigerants, solvents, and propellants in aerosol spray cans. Their widespread use was mainly due to its chemical inertness (non-flammable, non-corrosive, non-toxic) as well as to its versatility. Its chemical inertness is also problematic to the environment, as it can persist in the atmosphere for up to 120 years. But how is this chemical harmful if it’s inert? ",
+			"defaultImage": "IMG/uvSpectrum3.png",
+			"buttonLink": ""
+		},
+		{
+			"title": "Ozone and the Ozone Layer",
+			"titleColor": "#9C3474",
+			"buttonType": "textAnswer",
+			"buttonText": "Show Reaction",
+			"buttonContent": " Cl <sub>(g)</sub> + O<sub>3 (g)</sub> &#8594 ClO <sub>(g)</sub> + O<sub>2 (g)</sub> </br> ClO <sub>(g)</sub> + O<sub>(g)</sub> &#8594 Cl<sub>(g)</sub> + O<sub>2 (g)</sub> </br> Notice that chlorine is not only a reactant, but also a product of the reaction. Such a chemical that participates in a chemical reaction and influences its speed, without undergoing permanent change is known as a catalyst. On average, a single atom of chlorine can catalyze as many as 10<sup>5</sup> ozone molecules before it is carried back to the lower atmosphere. ",
+			"mainText": "In the upper atmosphere, UVC can break C-Cl bonds in CFCs. The resulting molecules are highly reactive and react with ozone molecules (O<sub>3</sub>) to form oxygen molecules (O<sub>2</sub>). ",
+			"defaultImage": "IMG/uvSpectrum3.png",
+			"buttonLink": ""
+		},
+		{
+			"title": "Ozone and the Ozone Layer",
+			"titleColor": "#9C3474",
+			"buttonType": "",
+			"buttonText": "",
+			"buttonContent": "",
+			"mainText": "Thanks to molecular oxygen (O<sub>2</sub>) and ozone (O<sub>3</sub>), the atmosphere is capable of providing enough protection from UV radiation to allow life to form and thrive. As we know, not all of the UV radiation is absorbed by the atmosphere. What happens to the rest of it? How does it impact life on Earth? move the photometer down to find out!",
+			"defaultImage": "IMG/Figure3_2.png",
+			"buttonLink": ""
+
+		}
+	],
+"fifthLayer":
+	[
+		{
+			"title": "Near the Surface",
+			"titleColor": "#1F8A8B",
+			"buttonType": "imageAnswer",
+			"buttonText": "Show UV Penetration in Skin",
+			"buttonContent": "IMG/skinPenetration.png",
+			"mainText": "After the ozone layer, there isn't much left that can absorb UV radiation, which means that skin, and life, are exposed to harmful rays. UVA, UVB, and UVC affect skin in different ways. UVA penetrates the furthest into the skin. It causes tanning, aging, and cancer through indirect DNA damage. UVB only penetrates the epidermis of the skin, and causes sunburns, vitamin D production, and cancer through direct DNA damage. ",
+			"defaultImage": "IMG/uvSpectrum3.png",
+			"buttonLink": ""
+		},
+		{
+			"title": "Near the Surface",
+			"titleColor": "#1F8A8B",
+			"buttonType": "overlay",
+			"buttonText": "Show UV Penetration in Atmosphere",
+			"buttonContent": "IMG/penetration2.png",
+			"mainText": "Thankfully, there is one more line of defense that we can add to help protect our skin from UV damage. Through the proper use of sunscreen, UVA and UVB can be further absorbed before reaching the skin. ",
+			"defaultImage": "IMG/uvSpectrum3.png",
+			"buttonLink": ""
+		},
+		{
+			"title": "Near the Surface",
+			"titleColor": "#1F8A8B",
+			"buttonType": "link",
+			"buttonText": "Open Sunscreen Applet",
+			"buttonContent": "../Sunscreen/sunscreen.html",
+			"mainText": "One of the more notable sunscreens is zinc oxide nanoparticles, as it provides protection from both UVA and UVB. Older zinc oxide based sunscreens were a thick white paste. Newer ones are made of nanoparticles, so they are completely invisible to visible light. The size of the nanoparticles impacts the absorbance rate of the sunscreen, thus providing sunscreen producers with control over the efficiency of the sunscreen. ",
+			"defaultImage": "IMG/uvSpectrum3.png",
+			"buttonLink": ""
+		}
+	]
+}
+

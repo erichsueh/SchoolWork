@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>UV in the Atmosphere</title>
+		<!-- CSS -->
+		<!--CSS from library-->
+		<link rel = "stylesheet" type = "text/css" href = "../../library/jquery-ui-1.10.3.custom/css/kcvs-theme/jquery-ui-1.10.3.custom.min.css">
+		<link rel = "stylesheet" href = "../../library/jquery-ui-1.11.4.custom/jquery-ui.css"/>
+		<!--custom CSS-->
+		<link rel = "stylesheet" type = "text/css" href = "CSS/menubar.css">
+		<link rel = "stylesheet" type = "text/css" href = "CSS/main.css">
+		<!--JS-->
+		<!--JS from library-->
+		<script src = "../../library/jquery-ui-1.10.3.custom/js/jquery-1.9.1.js"></script>
+		<script src = "../../library/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
+		<script type = "text/javascript" src = "../../library/jquery.ui.touch-punch.min.js"></script>
+		<!--custom JS-->
+		<script type = "text/javascript" src = "JS/containerSetup.js"></script>
+		<script type = "text/javascript" src = "JS/menuBar.js"></script>
+	</head>
+
+	<body onload = "setupContainer('appletContainer', 16, 9); resize();">
+
+		<div id = "appletContainer" style = "position:absolute; height:1019px; top:0px; width:1811.55555555556px; left:54.2222222222223px; font-size: 18.1155555555556px;">
+			<div id = "menuContainer">
+				<ul class = "menu">
+					<li><a href = '#'>Help</a>
+						<ul class = "submenu">
+							<li>
+								<a href = "#" onclick = "openInstructions();">
+									Instructions
+								</a>
+							</li>
+							<li>
+								<a href = "#" onclick = "openAbout();">
+									About
+								</a>
+							</li>
+							<li>
+								<a href = "#" onclick = "window.open('resources/sources.html');">
+									Sources
+								</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<div id = "logo" onclick = "window.open('http://www.kcvs.ca/site/');"></div>
+			</div>
+			
+
+			<!-- left side -->
+			<div id = "atmosphereContainer">
+				<div id = "atmosphereBkg">
+					<img id = "backgroundImage" src = "IMG/skyGraphicSun.png">
+					<img id = "altitudeImage" src = "IMG/altitude.png">
+					<img id = "overlayImage">
+					<!-- <canvas id = "atmosphereBkgdCanvas">Your browser does not support canvas</canvas> -->
+				</div>
+				<div id = "dragItem">
+					<img id = "dragItemImage" src = "IMG/photometer.png">
+					<!-- <canvas id = "dragItemCanvas"></canvas> -->
+				</div>
+			</div>
+
+			<!-- right side -->
+			<div id = "infoPanelContainer">
+				<div id = "infoPanel">
+					<!-- <canvas id = "infoPanelCanvas"> Your browser does not support canvas</canvas> -->
+					<div id = "panelTitle">
+						<span id = "titleName"></span>
+						<canvas id = "titleCanvas">Your browser does not support Canvas</canvas>
+					</div>
+					<div id = "panelText">
+						<span id = "mainText"></span>
+						<div id = "showButton" onclick = "layerList[currentLayerIndex].currentPage.handleShowClick();">
+							<span id = "showButtonText"></span>
+							<img id = "showBottonImage" src = "IMG/showPointer.png">
+						</div>
+					</div>
+					<div id = "panelExtra">
+						<span id = "extraText"></span>
+						<div id = "extraImageContainer">
+							<img id = "extraImage">
+						</div>
+						
+					</div>
+					<div id = "backButton" onclick = "layerList[currentLayerIndex].previousPage();">
+						<span id = "backButtonText">Back</span>
+						<img id = "backButtonImage" src = "IMG/backButton.png">
+					</div>
+					<div id = "forwardButton" onclick = "layerList[currentLayerIndex].nextPage();">
+						<span id = "nextButtonText">Next</span>
+						<img id = "nextButtonImage" src = "IMG/forwardButton.png">
+					</div>
+				</div>
+				
+			</div>
+
+			<div id = "instructionDiv">
+				<div id = "instDialog" title = "Instructions" style = "display:none;">
+					<p>
+						This applet will walk you through the steps by which UV light is absorbed by the atmosphere. Once you can no longer click "Next" in the bottom right corner of the screen, move the photometer (The photometer is black and white, and it is located on the upper left corner of the atmosphere image.) down until you reach the next layer. 
+					</p>
+					<p>
+						Don't forget to click on the various "show" buttons, as these will reveal additional key information and diagrams!
+					</p>
+					
+					
+				</div>
+			</div>
+
+			<div id = "aboutDiv">
+				<div id="aboutDialog" title="About" style="display:none;">
+				    <p>Applet Name: UV in the Atmosphere</p>
+			        <p>Version/Date: 1.0.0, August 2015</p>
+			        <p>Author(s):  Marc-Olivier Lajeunesse, Tyler deBoon, Dr. Brian Martin, Dr. Peter Mahaffy</p>
+			        <p> Contact: Visit <a href="http://www.kcvs.ca">www.kcvs.ca</a> for contact information</p>
+			        <div id="kcvsLogo"></div>
+			    </div>
+			</div>
+
+		</div>
+		<!-- main JS -->
+		<script type = "text/javascript" src = "JS/stack.js"></script>
+		<script type = "text/javascript" src = "JS/page.js"></script>
+		<script type = "text/javascript" src = "JS/layer.js"></script>
+		<script type = "text/javascript" src = "JS/infoPanel.js"></script>
+		<script type = "text/javascript" src = "JS/atmosphere.js"></script>
+	</body>
+</html>
+
+
+<!--
+Possible images
+https://commons.wikimedia.org/wiki/File:Radiation_Spectrum.png
+https://commons.wikimedia.org/wiki/File:Ozone_altitude_UV_graph.jpg
+https://commons.wikimedia.org/wiki/File:Ultiwavelength_extreme_ultraviolet_sun.jpg
+https://commons.wikimedia.org/wiki/File:Black_body.svg
+-->

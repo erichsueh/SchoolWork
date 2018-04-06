@@ -1,0 +1,81 @@
+{"firstLayer":
+	[
+		{
+			"title" : "Sample Title",
+			"titleColor": "#BA0D0D",
+			"buttonType": "textAnswer",
+			"buttonText": "Show Answer",
+			"buttonContent": "this is some answer filler text",
+			"mainText": "Some sample text to fill some space. Some more really good text. This is truly pure Literature. "
+		},
+		{
+			"title" : "Sample Title",
+			"titleColor": "#BA0D0D",
+			"buttonType": "textAnswer",
+			"buttonText": "show answer",
+			"buttonContent": "this is some answer filler text for the second answer. Some more filler.",
+			"mainText": "this is the second page. and here is some text to fill"
+		},
+		{
+			"title": "Sample Title",
+			"titleColor": "#BA0D0D",
+			"buttonType": "",
+			"buttonText": "",
+			"buttonContent": "",
+			"mainText": "Here is some filling filler text, textualizing textual typography, telling tales of Turkish tyrants in timber towers. Lots of repeated data in these pages."
+		}
+	],
+"secondLayer":
+	[
+		{
+			"title" : "I'm in your title",
+			"titleColor": "#1E1A8A",
+			"buttonType": "textAnswer",
+			"buttonText": "Show Answer",
+			"buttonContent": "this is some answer filler text",
+			"mainText": "Messing with your sample"
+		},
+		{
+			"title" : "Second Title",
+			"titleColor": "#1E1A8A",
+			"buttonType": "textAnswer",
+			"buttonText": "show answer",
+			"buttonContent": "this is some answer filler text for the second answer.",
+			"mainText": "this is the second page. and here is some text to fill"
+		}
+	],
+"thirdLayer":
+	[
+		{
+			"title": "Third Title",
+			"titleColor": "#1A8A3D",
+			"buttonType": "",
+			"buttonText": "",
+			"buttonContent": "",
+			"mainText": "Some simple soothing script, searching stunning stars"
+		}
+	],
+"fourthLayer":
+	[
+		{
+			"title": "Fourth Title",
+			"titleColor": "#9C3474",
+			"buttonType": "",
+			"buttonText": "",
+			"buttonContent": "",
+			"mainText": "Some filler text. I'm not sure Why I'm not using Lorem Ipsum. "
+		}
+	],
+"fifthLayer":
+	[
+		{
+			"title": "Fifth Title",
+			"titleColor": "#1F8A8B",
+			"buttonType": "",
+			"buttonText": "",
+			"buttonContent": "",
+			"mainText": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ut odio ut risus porttitor rutrum. Sed scelerisque egestas gravida. Vestibulum volutpat mi lobortis nisl bibendum sagittis. Suspendisse sit amet tristique tortor, sit amet dignissim velit. Donec tempor, purus quis blandit tincidunt, quam arcu finibus nisl, in sagittis nisl magna ut sem. Cras a lacinia ante, at interdum magna. Nullam nec ex malesuada, placerat elit in, laoreet risus. Suspendisse sit amet leo ac magna tristique congue. Duis quis odio vulputate massa pulvinar pulvinar vel in diam. Vestibulum condimentum hendrerit nisi, non venenatis turpis vehicula sed. Mauris vel vestibulum ex, eu interdum mi. Morbi eleifend malesuada erat vitae feugiat. Nullam massa dui, sagittis vel imperdiet id, cursus eleifend ligula."
+		}
+	]
+}
+

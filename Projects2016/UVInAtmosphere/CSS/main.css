@@ -1,0 +1,320 @@
+body
+{
+	overflow: hidden;
+	font-family:Arial, Helvetica, sans-serif;
+}
+#appletContainer
+{
+	overflow: hidden;
+}
+#atmosphereContainer
+{
+	position: absolute;
+	top: 5%;
+	left: 2%;
+	height: 90%;
+	width: 48%;
+	z-index: 1;
+}
+	#atmosphereBkg
+	{
+		position: absolute;
+		top: 0%;
+		right: 2%;
+		width: 98%;
+		height: 100%;
+		z-index: 1;
+		/*background-color: #3B3596;*/
+	}
+		#backgroundImage
+		{
+			position: absolute;
+			top: 0%;
+			right: 0%;
+			height: 100%;
+			width: auto;
+			z-index: 1;
+		}
+		#altitudeImage
+		{
+			position: absolute;
+			bottom: 0%;
+			height: 90%;
+			left: 0%;
+			width: auto;
+			z-index: 2;
+		}
+		#overlayImage
+		{
+			position: absolute;
+			top: 0%;
+			right: 0%;
+			height: auto;
+			width: 100%;
+			z-index: 3;
+			visibility: hidden;
+		}
+	#dragItem
+	{
+		position: absolute;
+		left: 16%;
+		width: 4%;
+		height: 7%;
+		top: 0%;
+		z-index: 5;
+		/*background-color: #4FAE5A;*/
+		cursor: n-resize;
+	}
+		#dragItemImage
+		{
+			position: absolute;
+			left: 0%;
+			top: 0%;
+			height: 100%;
+			width: auto;
+
+		}
+#infoPanelContainer
+{
+	position: absolute;
+	top: 5%;
+	left: 50%;
+	height: 90%;
+	width: 48%;
+	z-index: 1;
+}
+	#infoPanel
+	{
+		position: absolute;
+		top: 0%;
+		left: 0%;
+		height: 100%;
+		width: 100%;
+		z-index: 2;
+		border-style: solid;
+		border-color: #DB2C20;
+	}
+		#panelTitle
+		{
+			position: absolute;
+			top: 1%;
+			left: 1%;
+			width: 98%;
+			height: 15%;
+			/*background-color: #884A97;*/
+		}
+			#titleName
+			{
+				position: absolute;
+				top: 25%;
+				left: 0%;
+				width: 100%;
+				height: 100%;
+				z-index: 2;
+				display: inline-block;
+				text-align: center;
+				font-size: 3em;
+			}
+		#panelText
+		{
+			position: absolute;
+			top: 17%;
+			left: 1%;
+			width: 97%;
+			height: 45%;
+			border-style: solid;
+			border-color: #DC7D17;
+		}
+			#mainText
+			{
+				position: absolute;
+				top: 10%;
+				left: 0%;
+				width: 100%;
+				height: 60%;
+				display: inline-block;
+				text-align: center;
+				font-size: 1.4em;
+			}
+			#showButton
+			{
+				position: absolute;
+				top: 75%;
+				left: 30%;
+				width: 40%;
+				height: 1.6em;
+				/*background-color: #494DBF;*/
+				cursor: pointer;
+			}
+				#showButtonText
+				{
+					position: absolute;
+					top: 0.1em;
+					height: 1.4em;
+					left: 15%;
+					width: 85%;
+					display: inline-block;
+					font-size: 1.4em;
+
+				}
+				#showButtonImage
+				{
+					position: absolute;
+					top: 0%;
+					height: 100%;
+					left: 0%;
+					width: auto;
+				}
+		#panelExtra
+		{
+			position: absolute;
+			top: 63%;
+			left: 1%;
+			width: 97%;
+			height: 30%;
+			/*border-style: solid;*/
+			/*border-color: #58C614;*/
+		}
+			#extraText
+			{
+				position: absolute;
+				top: 5%;
+				left: 5%;
+				width: 90%;
+				height: 90%;
+				display: inline-block;
+				text-align: center;
+				font-size: 1.3em;
+			}
+			#extraImageContainer
+			{
+				position: absolute;
+				top: 5%;
+				left: 5%;
+				width: 90%;
+				height: 90%;
+			}
+				#extraImage
+				{	
+					position: absolute;
+					display: block;
+					top: 0%;
+					left: 0%;
+					margin-left: auto;
+					margin-right: auto;
+					width: auto;
+					height: 100%;
+				}
+		#backButton
+		{
+			position: absolute;
+			top: 94%;
+			left: 2%;
+			width: 12%;
+			height: 5%;
+			/*background-color: #2273E4;*/
+			visibility: hidden;
+			cursor: pointer;
+		}
+			#backButtonText
+			{
+				position: absolute;
+				top: 15%;
+				left: 30%;
+				width: 70%;
+				height: 1.4em;
+				display: inline-block;
+				font-size: 1.4em;
+				text-align: center;
+			}
+			#backButtonImage
+			{
+				position: absolute;
+				left: 0%;
+				top: 10%;
+				width: 30%;
+				height: auto;
+			}
+		#forwardButton
+		{
+			position: absolute;
+			top: 94%;
+			left: 86%;
+			width: 12%;
+			height: 5%;
+			/*background-color: #26CB9A;*/
+			visibility: visible;
+			cursor: pointer;
+		}
+			#nextButtonText
+			{
+				position: absolute;
+				top: 15%;
+				right: 30%;
+				width: 70%;
+				height: 1.4em;
+				display: inline-block;
+				font-size: 1.4em;
+				text-align: center;
+			}
+			#nextButtonImage
+			{
+				position: absolute;
+				right: 0%;
+				top: 10%;
+				width: 30%;
+				height: auto;
+			}
+
+/*   Canvas   */
+
+#titleCanvas
+{
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+}
+
+
+
+
+/*instructions*/
+#instructionDiv{
+	position: absolute;
+	width: 23%;
+	height: 48%;
+	left: 38%;
+	top: 20%;
+}
+/**************/
+
+/*About*/
+#kcvsLogo {
+	position:absolute;
+	background:url(../IMG/logo4.png);
+	/*width:225px;
+	height:100px;
+	left:100px;*/
+	width: 80%;
+	height: 22%;
+	left: 20%;
+	background-repeat: no-repeat;
+
+}
+
+.ui-dialog-titlebar-close{
+	position:relative;
+	left:90%;
+}
+
+#aboutDiv{
+	position: absolute;
+	width: 23%;
+	height: 48%;
+	left: 38%;
+	top: 20%;
+}
+/*******/
