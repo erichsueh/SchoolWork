@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Lets Hope This ~*(:@*# Works</title>
+		<style type="text/css">
+			body {
+				background-color: rgb(30,30,35);
+				color: white;
+			}
+			canvas {
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				z-index: 1;
+			}
+			#fps {
+				position: absolute;
+				top: 0px;
+				right: 0px;
+			}
+			#GUI {
+				position: absolute;
+				bottom: 0px;
+				left: 0px;
+				z-index: 10;
+				padding:10px;
+			}
+			#GUI span {
+				display: inline-block;
+			}
+			#GUI button {
+				width: 80px;
+			}
+			#GUI select {
+				width: 80px;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id = "botLayer"></canvas>
+		<canvas id = "midLayer"></canvas>
+		<canvas id = "topLayer"></canvas>
+		<div id = "fps"></div>
+		<div id = "GUI">
+			<span>
+				<div>
+					<button onclick = "">Reveal</button>
+				</div>
+				<div>
+					<button id = "startPause" onclick = "togglePause();">Start</button>
+				</div>
+				<div>
+					<button onclick = "clearMid();">Clear</button>
+				</div>
+				<div>
+					<button onclick = "">Radius</button>
+				</div>
+				<div>
+					<select id = "particleSelect" onchange="decayParticle()">
+						<option value = "Beta">Beta</option>
+						<option value = "Pair Productions">Pair Productions</option>
+						<option value = "Alpha">Alpha</option>
+						<option value = "Kaon">Kaon</option>
+						<option value = "Neutron">Neutron</option>
+						<option value = "Random">Random</option>
+					</select>
+				</div>
+			</span>
+			<span>
+				<div id = "particleLabel">Electron</div>
+				<div id = "scaleLabel">1000px/m</div>
+			</span>
+		</div>
+

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Lets Hope This ~*(:@*# Works</title>
+		<style type="text/css">
+			body {
+				background-color: rgb(30,30,35);
+				color: white;
+			}
+			canvas {
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				z-index: 1;
+			}
+			#fps {
+				position: absolute;
+				top: 0px;
+				right: 0px;
+			}
+			#GUI {
+				position: absolute;
+				bottom: 0px;
+				left: 0px;
+				z-index: 10;
+				padding:10px;
+			}
+			#GUI span {
+				display: inline-block;
+			}
+			#GUI button {
+				width: 80px;
+			}
+			#GUI select {
+				width: 80px;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id = "botLayer"></canvas>
+		<canvas id = "midLayer"></canvas>
+		<canvas id = "topLayer"></canvas>
+		<div id = "fps"></div>
+		<div id = "GUI">
+			<span>
+				<div>
+					Velocity<br />
+					<input id="v" type="range" min="1000" max="300000" step="500" value="15000" name="velInput">
+				</div>
+
+				<div>
+					Magnetic Field<br />
+					<input id="mf" type="range" min="-2" max="2" step="0.001" value="1" name="magneticfieldInput" oninput = "invalidMF()">
+				</div>
+
+				<div>
+					Electric Field<br />
+					<input id="ef" type="range" min="-100" max="100" step="0.01" value="0" name="electricfieldInput" oninput = "invalidEF()">
+				</div>
+			</span>
+			<span>
+				<div>
+					<button onclick = "">Reveal</button>
+				</div>
+				<div>
+					<button id = "startPause" onclick = "togglePause();">Start</button>
+				</div>
+				<div>
+					<button onclick = "reset(); Pause();">Stop</button>
+				</div>
+				<div>
+					<button onclick = "clearMid();">Clear</button>
+				</div>
+				<div>
+					<button id = "singleMulti" onclick = "toggleMulti();">Multiple</button>
+				</div>
+				<div>
+					<select id = "particleSelect" onchange="changeParticle()">
+						<option value = "Electron">Electron</option>
+						<option value = "Proton">Proton</option>
+						<option value = "Positron">Positron</option>
+						<option value = "Muon">Muon</option>
+						<option value = "Alpha">Alpha</option>
+					</select>
+				</div>
+			</span>
+			<span>
+				<div id = "particleLabel">Electron</div>
+				<div id = "scaleLabel">100000px/m</div>
+			</span>
+		</div>
+
+
+		<script type="text/javascript" src = "vector.js"></script>
+		<script type="text/javascript" src = "physics.js"></script>
+		<script type="text/javascript" src = "PhysicsObject.js"></script>
+		<script type="text/javascript">
+			// canvas setup.
+			var canvasSizeX = window.innerWidth;
+			var canvasSizeY = window.innerHeight;
+			// Bottom layer is used for the field dots/Xs and the arrow
+			var canvasB = botLayer;
+			canvasB.width = canvasSizeX;
+			canvasB.height = canvasSizeY;
+			var ctxB = canvasB.getContext("2d");
+			// Middle layer is used for the follow line
+			var canvasM = midLayer;
+			canvasM.width = canvasSizeX;
+			canvasM.height = canvasSizeY;
+			var ctxM = canvasM.getContext("2d");
+			ctxM.lineWidth = 2;
+			ctxM.strokeStyle = "white";
+			// Top layer is used for the particle dot
+			var canvasT = topLayer;
+			canvasT.width = canvasSizeX;
+			canvasT.height = canvasSizeY;
+			var ctxT = canvasT.getContext("2d");
+			ctxT.fillStyle = "white";
+			// used for calculating delta
+			var lastTime = Date.now();
+			var deta = 0;
+			// used to tell the bottom layer to redraw. Avoids redraw every frame
+			var mfChanged = true;
+			var efChanged = true;
+			// physics variables
+			var physicsObject = new PhysicsObject();
+			var ball = {};
+			var mass = 9.1E-31;
+			var q = -1;
+			var scaler = 100000;
+			var scale2 = scaler;
+			var scale2a = 1000000;
+			// drawing the follow line helper variables
+			var followX, followY;
+			// simulation control variables
+			var paused = true;
+			var multi = false;
+			// color list for the follower
+			var currentColor = 0;
+			var colorList = [
+				"white",
+				"rgb(246, 248, 113)",
+				"rgb(49, 171, 84)",
+				"rgb(75, 24, 215)",
+				"rgb(134, 53, 119)",
+				"rgb(200, 19, 114)"
+			];
+
+
+			function changeParticle() {
+				var value = particleSelect.value;
+				if(value == "Electron") {
+					mass = 9.1E-31;
+					q = -1;
+					scaler = 100000;
+					particleLabel.innerHTML = "Electron";
+				}
+				if(value == "Positron") {
+					mass = 9.1E-31;
+					q = 1;
+					scaler = 100000;
+					particleLabel.innerHTML = "Positron";
+				}
+				else if(value == "Proton") {
+					mass = 1.67E-27;
+					q = 1;
+					scaler = 1000;
+					particleLabel.innerHTML = "Proton";
+				} 
+				else if(value == "Muon") {
+					mass = 1.88353109E-28;
+					q = -1;
+					scaler = 10000;
+					particleLabel.innerHTML = "Muon";
+				} 
+				else if(value == "Alpha") {
+					mass = 6.68E-27;
+					q = 2;
+					scaler = 1000;
+					particleLabel.innerHTML = "Alpha";
+				}
+				scaleLabel.innerHTML = scaler + "px/m";
+				reset();
+				Pause();
+				reset(); // dont know why i have to reset this twice here. If I don't it freaks out when trying to shoot a proton
+			}
+
+			function init() {
+				reset();	
+				update();
+			}
+			function invalidMF() {
+				mfChanged = true;
+			}
+			function invalidEF() {
+				efChanged = true;
+			}
+			function togglePause() {
+				paused = !paused;
+				changeButtonText();
+			}
+			function Pause() {
+				paused = true;
+				changeButtonText();
+			}
+			function toggleMulti() {
+				multi = !multi;
+				changeButtonText();
+			}
+			function changeButtonText() {
+				if (paused) {
+					startPause.innerHTML = "Start";
+				}
+				else {
+					startPause.innerHTML = "Pause";
+				}
+				if (multi) {
+					singleMulti.innerHTML = "Single";
+				}
+				else {
+					singleMulti.innerHTML = "Multiple";
+				}
+			}
+			function reset() {
+				// clear canvases
+				ctxT.clearRect(0,0,canvasSizeX, canvasSizeY);
+				if (!multi) {
+					ctxM.clearRect(0,0,canvasSizeX, canvasSizeY);
+				}
+				ctxB.clearRect(0,0,canvasSizeX, canvasSizeY);
+				// ball reset
+				ball.xPos = canvasSizeX / 2;
+				ball.yPos = canvasSizeY / 2;
+				ball.z = 0;
+				ball.vx = parseInt(v.value) * 1000 * scale2;
+				ball.vy = 0;
+				ball.vz = 0;
+				ball.mass = mass;
+				ball.q = 1.6E-19 * q;
+				ball.dt = 5 / (Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy)) * ((parseInt(v.value) * 1000 / 30E8) + 0.01) * 10;
+				// reset helper variables
+				followX = ball.xPos;
+				followY = ball.yPos;
+				// change scale
+				scale2 = scaler;
+
+				mfChanged = true;
+				efChanged = true;
+
+				// follow line color changing
+				if (multi) {
+					// pick from list
+					ctxM.strokeStyle = colorList[currentColor];
+					currentColor = ++currentColor % colorList.length;
+				}
+				else {
+					ctxM.strokeStyle = "white";
+				}
+			}
+			function clearMid() {
+				ctxM.clearRect(0, 0, canvasSizeX, canvasSizeY);
+				currentColor = 0;
+				reset();
+				Pause();
+			}
+			function move() {
+				// var thing:object2D = new object2D(ball.xPos, ball.yPos);	
+				//setting up old positions to be used in RK4
+				// i should not have to use these. I should be able to use the ball.r_old but it does not like drawing lines between them
+				followX = ball.xPos;
+				followY = ball.yPos;
+				
+				ball.r_old = new vector(ball.xPos, ball.yPos, 0);
+				ball.v_old = new vector(ball.vx, ball.vy, 0);
+				//This allows the magnetic field to be varied during the movie.
+				bfield = new vector(0, 0, parseFloat(mf.value));
+				efield = new vector(0, -1 * scale2 * scale2a * parseFloat(ef.value), 0);
+				//Applies BField and EField using the RK4 method.
+				// console.log(ball);
+				physicsObject.RK4EB(ball, bfield, scale2, efield);
+				// console.log(ball);
+				ball.vx = ball.v_old.x;
+				ball.vy = ball.v_old.y;
+			}
+
+			function draw() {
+				drawTopLayer();
+				drawMidLayer();
+				drawBotLayer();
+			}
+			function drawTopLayer() {
+				ctxT.clearRect(0, 0, canvasSizeX, canvasSizeY)
+				if (!paused) {
+					ctxT.beginPath();
+					ctxT.arc(ball.xPos, ball.yPos, 4, 0, 2 * Math.PI);
+					ctxT.fill();
+					ctxT.closePath();
+				}
+			}
+			function drawMidLayer() {
+				ctxM.beginPath();
+				// ctxM.lineTo(ball.r_old.x, ball.r_old.y);
+				// ctxM.lineTo(ball.xPos, ball.yPos);
+				ctxM.moveTo(followX, followY);
+				ctxM.lineTo(ball.xPos, ball.yPos);
+				ctxM.stroke();
+				ctxM.closePath();
+			}
+			function drawBotLayer() {
+				// bottom layer
+				if (mfChanged || efChanged) {// only change this layer when the mf.value has changed
+					mfChanged = false;
+					efChanged = false;
+					ctxB.clearRect(0, 0, canvasSizeX, canvasSizeY)
+					// mf drawings
+					var mag = parseFloat(mf.value);
+					var circles = true; // 
+					if (mag < 0) {
+						circles = false;// draw exes
+					}
+					var transperency = Math.abs(mag) / 4;
+					ctxB.fillStyle = "rgba(150, 150, 150, " + transperency + ")";
+					ctxB.strokeStyle = "rgba(100, 100, 100, " + transperency + ")";
+					var xSpacing = canvasSizeX / 20;
+					var ySpacing = canvasSizeY / 14;
+					for (var i = xSpacing / 2; i < canvasSizeX + xSpacing; i += xSpacing) {
+						for (var j = ySpacing / 2; j < canvasSizeY + ySpacing; j += ySpacing) {
+							if (circles) {
+								ctxB.beginPath();
+								ctxB.arc(i, j, 10, 0, 2 * Math.PI);
+								ctxB.fill();
+								ctxB.closePath();
+							}
+							else {
+								ctxB.beginPath();
+								ctxB.moveTo(i - 5, j - 10);
+								ctxB.lineTo(i + 5, j + 10)
+								ctxB.moveTo(i - 5, j + 10);
+								ctxB.lineTo(i + 5, j - 10)
+								ctxB.stroke();
+								ctxB.closePath();
+							}
+						}
+					}
+					// ef drawings
+					var e = parseFloat(ef.value);
+					// start in the very middle of the canvas
+					transperency = Math.abs(e) / 120;
+					ctxB.strokeStyle = "rgba(255,0,0," + transperency + ")";
+					ctxB.lineWidth = 3;
+					ctxB.beginPath();
+					ctxB.moveTo(canvasSizeX / 2, canvasSizeY / 2);
+					// move up or down based on e
+					ctxB.lineTo(canvasSizeX / 2, canvasSizeY / 2 + e);
+					ctxB.lineTo(canvasSizeX / 2 - 5, canvasSizeY / 2 + e - (e / 20))
+					ctxB.moveTo(canvasSizeX / 2 + 5, canvasSizeY / 2 + e - (e / 20))
+					ctxB.lineTo(canvasSizeX / 2, canvasSizeY / 2 + e);
+					// draw the arrow
+					ctxB.stroke();
+					ctxB.closePath();
+				}
+			}
+
+			function update() {
+				var now = Date.now();
+				delta = (now - lastTime) / 1000;
+				lastTime = now;
+				fps.innerHTML = parseInt(1 / delta);
+				// ball.dt = delta;
+				if (!paused) {
+					move(); // still tied to frame rate! need to incorporate delta somewhere
+				}
+				draw();
+				window.requestAnimationFrame(update);
+			}
+			init();
+			canvasT.onclick = reset;
+		</script>
+	</body>
+</html>

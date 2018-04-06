@@ -1,0 +1,10 @@
+body {
+    background-color: black;
+    border-style: inset;
+}
+
+p {
+    color: cyan;
+    margin-left: 20px;
+    background-color: green;
+}
